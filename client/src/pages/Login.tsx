@@ -132,12 +132,6 @@ const Login: React.FC = () => {
               </p>
             </div>
           </div>
-
-          <div className="mt-4 text-center">
-            <p className="text-xs text-gray-400 dark:text-dark-500">
-              Demo accounts: admin@crm.com / Admin@123
-            </p>
-          </div>
         </div>
       </div>
     </div>
