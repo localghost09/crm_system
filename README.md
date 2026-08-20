@@ -31,6 +31,7 @@ CRM Pro gives sales teams a single platform to run their entire operation:
 ## 2. Features
 
 ### Core CRM
+
 - ✅ **Authentication** — register, login, refresh-token rotation, secure httpOnly cookies, bcrypt password hashing
 - ✅ **Role-Based Access Control** — enforced on the **backend**, not just the UI (Admin / Sales Manager / Sales Executive)
 - ✅ **Lead Management** — create, edit, assign, reassign, search, filter, sort, paginate, tag, add notes
@@ -47,6 +48,7 @@ CRM Pro gives sales teams a single platform to run their entire operation:
 - ✅ **Automated Jobs** — cron-based follow-up reminders and overdue detection (no frontend timers)
 
 ### UI/UX
+
 - 🎨 Modern SaaS design with **dark mode**
 - 📱 Fully responsive with mobile-friendly navigation
 - 💀 Loading skeletons, empty states, and error states
@@ -57,13 +59,13 @@ CRM Pro gives sales teams a single platform to run their entire operation:
 
 ## 3. Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS, React Router, TanStack Query, React Hook Form, Zod, Recharts, Axios |
-| **Backend** | Node.js, Express.js, JWT, bcryptjs, express-validator, node-cron |
-| **Database** | MongoDB with Mongoose ODM (indexed, normalized schema) |
-| **Testing** | Jest + Supertest + mongodb-memory-server (36 integration tests) |
-| **Deployment** | Vercel (frontend), Render/Railway (backend), MongoDB Atlas (database) |
+| Layer          | Technology                                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Frontend**   | React 18, TypeScript, Vite, Tailwind CSS, React Router, TanStack Query, React Hook Form, Zod, Recharts, Axios |
+| **Backend**    | Node.js, Express.js, JWT, bcryptjs, express-validator, node-cron                                              |
+| **Database**   | MongoDB with Mongoose ODM (indexed, normalized schema)                                                        |
+| **Testing**    | Jest + Supertest + mongodb-memory-server (36 integration tests)                                               |
+| **Deployment** | Vercel (frontend), Render/Railway (backend), MongoDB Atlas (database)                                         |
 
 ---
 
@@ -101,6 +103,7 @@ crm-system/
 ```
 
 ### Request Flow
+
 ```
 React UI → Axios (JWT interceptor) → Express Router → Validators → Auth/RBAC Middleware
         → Controller → Service → Mongoose → MongoDB
@@ -111,19 +114,20 @@ React UI → Axios (JWT interceptor) → Express Router → Validators → Auth/
 
 ## 5. Database Schema
 
-| Entity | Key Fields | Indexes |
-|--------|-----------|---------|
-| **User** | name, email, password (hashed), role (`admin`/`manager`/`executive`), department, refreshToken | email, role |
-| **Lead** | name, company, email, phone, source, industry, status, priority, assignedTo, estimatedValue, tags, notes | email, phone, company+name, status, assignedTo, createdAt |
-| **Customer** | name, company, email, phone, address, industry, status, totalPurchases, leadSource | email, phone, company+name, status, assignedTo |
-| **Opportunity** | title, customer, lead, assignedTo, stage, expectedValue, probability, closingDate | stage, assignedTo, customer, expectedClosingDate |
-| **Task** | title, description, assignedTo, priority, dueDate, relatedTo (polymorphic), status | assignedTo, status, dueDate, priority |
-| **FollowUp** | title, assignedTo, lead/customer/opportunity, followUpDate, status | assignedTo, followUpDate, status, customer |
-| **Interaction** | type, subject, description, lead/customer/opportunity, performedBy | lead, customer, performedBy, createdAt |
-| **Notification** | user, type, title, message, relatedTo, isRead | user+isRead, createdAt |
-| **AuditLog** | user, action, entity, entityId, description, ipAddress, metadata | user, action, entity, createdAt |
+| Entity           | Key Fields                                                                                               | Indexes                                                   |
+| ---------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| **User**         | name, email, password (hashed), role (`admin`/`manager`/`executive`), department, refreshToken           | email, role                                               |
+| **Lead**         | name, company, email, phone, source, industry, status, priority, assignedTo, estimatedValue, tags, notes | email, phone, company+name, status, assignedTo, createdAt |
+| **Customer**     | name, company, email, phone, address, industry, status, totalPurchases, leadSource                       | email, phone, company+name, status, assignedTo            |
+| **Opportunity**  | title, customer, lead, assignedTo, stage, expectedValue, probability, closingDate                        | stage, assignedTo, customer, expectedClosingDate          |
+| **Task**         | title, description, assignedTo, priority, dueDate, relatedTo (polymorphic), status                       | assignedTo, status, dueDate, priority                     |
+| **FollowUp**     | title, assignedTo, lead/customer/opportunity, followUpDate, status                                       | assignedTo, followUpDate, status, customer                |
+| **Interaction**  | type, subject, description, lead/customer/opportunity, performedBy                                       | lead, customer, performedBy, createdAt                    |
+| **Notification** | user, type, title, message, relatedTo, isRead                                                            | user+isRead, createdAt                                    |
+| **AuditLog**     | user, action, entity, entityId, description, ipAddress, metadata                                         | user, action, entity, createdAt                           |
 
 ### Relationships
+
 ```
 User 1──N Leads, Customers, Opportunities, Tasks, FollowUps
 Lead 1──1 Customer (convertedToCustomer)
@@ -141,73 +145,81 @@ User 1──N AuditLogs
 Base URL: `http://localhost:5000/api` · Auth: `Authorization: Bearer <accessToken>`
 
 ### Authentication
-| Method | Endpoint | Description | Access |
-|--------|----------|-------------|--------|
-| POST | `/auth/register` | Create account | Public |
-| POST | `/auth/login` | Login, returns JWT pair | Public |
-| POST | `/auth/logout` | Invalidate session | All |
-| GET | `/auth/me` | Current user profile | All |
-| POST | `/auth/refresh` | Rotate refresh token | Public |
+
+| Method | Endpoint         | Description             | Access |
+| ------ | ---------------- | ----------------------- | ------ |
+| POST   | `/auth/register` | Create account          | Public |
+| POST   | `/auth/login`    | Login, returns JWT pair | Public |
+| POST   | `/auth/logout`   | Invalidate session      | All    |
+| GET    | `/auth/me`       | Current user profile    | All    |
+| POST   | `/auth/refresh`  | Rotate refresh token    | Public |
 
 ### Leads
-| Method | Endpoint | Description | Access |
-|--------|----------|-------------|--------|
-| GET | `/leads?page&limit&search&status&source&priority` | List (server-paginated) | All |
-| GET | `/leads/:id` | Lead detail | All |
-| POST | `/leads` | Create (409 on duplicate) | All |
-| PATCH | `/leads/:id` | Update / reassign | All |
-| DELETE | `/leads/:id` | Soft delete | All |
-| POST | `/leads/:id/convert` | Convert to customer + opportunity | All |
+
+| Method | Endpoint                                          | Description                       | Access |
+| ------ | ------------------------------------------------- | --------------------------------- | ------ |
+| GET    | `/leads?page&limit&search&status&source&priority` | List (server-paginated)           | All    |
+| GET    | `/leads/:id`                                      | Lead detail                       | All    |
+| POST   | `/leads`                                          | Create (409 on duplicate)         | All    |
+| PATCH  | `/leads/:id`                                      | Update / reassign                 | All    |
+| DELETE | `/leads/:id`                                      | Soft delete                       | All    |
+| POST   | `/leads/:id/convert`                              | Convert to customer + opportunity | All    |
 
 ### Customers
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/customers?page&limit&search&status` | List |
-| GET | `/customers/:id` | 360° profile (opportunities, interactions, tasks, follow-ups) |
-| POST | `/customers` | Create (409 on duplicate email/phone) |
-| PATCH | `/customers/:id` | Update |
-| DELETE | `/customers/:id` | Soft delete |
+
+| Method | Endpoint                              | Description                                                   |
+| ------ | ------------------------------------- | ------------------------------------------------------------- |
+| GET    | `/customers?page&limit&search&status` | List                                                          |
+| GET    | `/customers/:id`                      | 360° profile (opportunities, interactions, tasks, follow-ups) |
+| POST   | `/customers`                          | Create (409 on duplicate email/phone)                         |
+| PATCH  | `/customers/:id`                      | Update                                                        |
+| DELETE | `/customers/:id`                      | Soft delete                                                   |
 
 ### Opportunities
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/opportunities?page&limit&search&stage` | List |
-| GET | `/opportunities/:id` | Detail |
-| POST | `/opportunities` | Create |
-| PATCH | `/opportunities/:id` | Update |
-| PATCH | `/opportunities/:id/stage` | Move pipeline stage (Won/Lost supported) |
-| DELETE | `/opportunities/:id` | Soft delete |
+
+| Method | Endpoint                                 | Description                              |
+| ------ | ---------------------------------------- | ---------------------------------------- |
+| GET    | `/opportunities?page&limit&search&stage` | List                                     |
+| GET    | `/opportunities/:id`                     | Detail                                   |
+| POST   | `/opportunities`                         | Create                                   |
+| PATCH  | `/opportunities/:id`                     | Update                                   |
+| PATCH  | `/opportunities/:id/stage`               | Move pipeline stage (Won/Lost supported) |
+| DELETE | `/opportunities/:id`                     | Soft delete                              |
 
 ### Tasks & Follow-ups
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET/POST | `/tasks` | List / create |
-| PATCH/DELETE | `/tasks/:id` | Update (complete with timestamp) / delete |
-| GET/POST | `/followups` | List / schedule |
-| PATCH/DELETE | `/followups/:id` | Update (complete/cancel) / delete |
+
+| Method       | Endpoint         | Description                               |
+| ------------ | ---------------- | ----------------------------------------- |
+| GET/POST     | `/tasks`         | List / create                             |
+| PATCH/DELETE | `/tasks/:id`     | Update (complete with timestamp) / delete |
+| GET/POST     | `/followups`     | List / schedule                           |
+| PATCH/DELETE | `/followups/:id` | Update (complete/cancel) / delete         |
 
 ### Dashboard & Reports
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/dashboard/summary` | KPI cards + upcoming follow-ups, overdue tasks, recent leads/deals |
-| GET | `/dashboard/revenue` | Monthly won revenue |
-| GET | `/dashboard/pipeline` | Stage distribution + all opportunities |
-| GET | `/dashboard/performance` | Revenue by employee, win/loss, pipeline value |
-| GET | `/dashboard/charts` | Lead sources, customer growth, lead status |
+
+| Method | Endpoint                 | Description                                                        |
+| ------ | ------------------------ | ------------------------------------------------------------------ |
+| GET    | `/dashboard/summary`     | KPI cards + upcoming follow-ups, overdue tasks, recent leads/deals |
+| GET    | `/dashboard/revenue`     | Monthly won revenue                                                |
+| GET    | `/dashboard/pipeline`    | Stage distribution + all opportunities                             |
+| GET    | `/dashboard/performance` | Revenue by employee, win/loss, pipeline value                      |
+| GET    | `/dashboard/charts`      | Lead sources, customer growth, lead status                         |
 
 ### Admin Only
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET/POST | `/users` | List / create team members |
-| PATCH/DELETE | `/users/:id` | Update roles / deactivate |
-| GET | `/audit` | Audit log trail |
+
+| Method       | Endpoint     | Description                |
+| ------------ | ------------ | -------------------------- |
+| GET/POST     | `/users`     | List / create team members |
+| PATCH/DELETE | `/users/:id` | Update roles / deactivate  |
+| GET          | `/audit`     | Audit log trail            |
 
 ### Notifications
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/notifications` | List + unread count |
-| GET | `/notifications/unread-count` | Unread badge count |
-| PATCH | `/notifications/:id/read` | Mark read (or `all`) |
+
+| Method | Endpoint                      | Description          |
+| ------ | ----------------------------- | -------------------- |
+| GET    | `/notifications`              | List + unread count  |
+| GET    | `/notifications/unread-count` | Unread badge count   |
+| PATCH  | `/notifications/:id/read`     | Mark read (or `all`) |
 
 ---
 
@@ -216,6 +228,7 @@ Base URL: `http://localhost:5000/api` · Auth: `Authorization: Bearer <accessTok
 Copy each `.env.example` to `.env` and fill in real values. **Never commit `.env`.**
 
 ### Server (`server/.env`)
+
 ```env
 PORT=5000
 NODE_ENV=development
@@ -228,6 +241,7 @@ CORS_ORIGIN=http://localhost:3000
 ```
 
 ### Client (`client/.env`)
+
 ```env
 VITE_API_URL=/api
 ```
@@ -258,6 +272,7 @@ npm run dev                 # → http://localhost:3000
 ```
 
 ### 🧪 Run the full stack with zero setup (in-memory DB)
+
 ```bash
 cd server
 node dev-runner.js          # starts in-memory MongoDB → seeds → boots API
@@ -304,6 +319,7 @@ npm test           # 36 integration tests (Jest + Supertest + in-memory MongoDB)
 ```
 
 Coverage includes:
+
 - ✅ Authentication (register, login, token protection, password hashing)
 - ✅ Leads (CRUD, duplicate detection, pagination, search, filter)
 - ✅ RBAC (admin-only routes denied for manager/executive, executive data scoping)
@@ -314,6 +330,7 @@ Coverage includes:
 ## 13. Deployment
 
 ### Backend → Render / Railway
+
 1. Push the repo to GitHub
 2. On Render, create a **Web Service** → connect repo → root dir: `server`
 3. Build: `npm install` · Start: `npm start`
@@ -321,12 +338,14 @@ Coverage includes:
 5. Set `CORS_ORIGIN` to your Vercel URL
 
 ### Frontend → Vercel
+
 1. On Vercel, import the repo → root dir: `client`
 2. Build: `npm run build` · Output: `dist`
 3. Env: `VITE_API_URL=https://<your-backend>.onrender.com/api`
 4. Deploy 🎉
 
 ### Database → MongoDB Atlas
+
 Managed, indexed, auto-backup. See §9.
 
 ---
