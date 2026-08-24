@@ -11,6 +11,7 @@ import Select from '../components/common/Select';
 import DatePicker from '../components/common/DatePicker';
 import DonutBreakdown from '../components/common/DonutBreakdown';
 import { formatCurrency, downloadCSV, getInitials } from '../utils/helpers';
+import { normalizeMonthlySeries } from '../utils/chartData';
 
 const chartTooltipStyle = {
   contentStyle: {
@@ -88,20 +89,16 @@ const Reports: React.FC = () => {
 
   if (isLoading) return <PageSkeleton />;
 
-  const monthlyRevenue = (revenueData || []).map((item: any) => ({
-    month: item._id,
-    revenue: item.revenue,
-  }));
+  // Aggregations only return months that contain records; normalize so the
+  // smooth spline always has >= 2 points to draw (zero-padded when sparse).
+  const monthlyRevenue = normalizeMonthlySeries(revenueData, 'revenue', 'revenue');
 
   const leadSourceData = (chartData?.leadsBySource || []).map((item: any) => ({
     name: item._id,
     value: item.count,
   }));
 
-  const customerGrowthData = (chartData?.customerGrowth || []).map((item: any) => ({
-    month: item._id,
-    customers: item.count,
-  }));
+  const customerGrowthData = normalizeMonthlySeries(chartData?.customerGrowth, 'customers');
 
   const totalRevenue = performance.reduce((sum: number, p: any) => sum + (p.revenue || 0), 0);
   const totalWon = performance.reduce((sum: number, p: any) => sum + (p.wonDeals || 0), 0);
