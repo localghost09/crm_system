@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { Plus, Search, Pencil, Trash2, Eye, FileOutput, Building2, Mail, Phone, MapPin } from 'lucide-react';
+import { Plus, Search, Pencil, Trash2, Eye, FileOutput, Building2, Mail, Phone, MapPin, RefreshCw } from 'lucide-react';
 import api from '../services/api';
 import Badge from '../components/common/Badge';
 import Modal from '../components/common/Modal';
+import Select from '../components/common/Select';
 import ConfirmDialog from '../components/common/ConfirmDialog';
 import Pagination from '../components/common/Pagination';
 import EmptyState from '../components/common/EmptyState';
@@ -35,10 +37,20 @@ const emptyForm: CustomerForm = {
 
 const Customers: React.FC = () => {
   const queryClient = useQueryClient();
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
   const debouncedSearch = useDebounce(search, 400);
   const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
+
+  // Deep-link support: /customers?search=foo (used by the global search box)
+  const urlSearch = searchParams.get('search');
+  useEffect(() => {
+    if (urlSearch !== null) {
+      setSearch(urlSearch);
+      setPage(1);
+    }
+  }, [urlSearch]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Customer | null>(null);
   const [viewing, setViewing] = useState<Customer | null>(null);
@@ -46,7 +58,7 @@ const Customers: React.FC = () => {
   const [form, setForm] = useState<CustomerForm>(emptyForm);
   const [formError, setFormError] = useState('');
 
-  const { data: customersData, isLoading } = useQuery({
+  const { data: customersData, isLoading, isError, refetch } = useQuery({
     queryKey: ['customers', { page, status, search: debouncedSearch }],
     queryFn: async () => {
       const params: any = { page, limit: 10 };
@@ -198,16 +210,19 @@ const Customers: React.FC = () => {
               className="input-field pl-10"
             />
           </div>
-          <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} className="input-field sm:w-44">
-            <option value="">All Status</option>
-            {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
+          <Select value={status} onChange={(v) => { setStatus(v); setPage(1); }} options={STATUSES} placeholder="All Status" className="sm:w-44" />
         </div>
       </div>
 
       <div className="card">
         {isLoading ? (
           <TableSkeleton />
+        ) : isError ? (
+          <EmptyState
+            title="Couldn't load customers"
+            description="Something went wrong while fetching data. Check your connection and try again."
+            action={<button onClick={() => refetch()} className="btn-primary"><RefreshCw className="w-4 h-4 mr-1" /> Retry</button>}
+          />
         ) : customersData?.data?.length === 0 ? (
           <EmptyState
             title="No customers found"
@@ -296,18 +311,15 @@ const Customers: React.FC = () => {
           </div>
           <div>
             <label className={labelCls}>Status</label>
-            <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className={inputCls}>
-              {STATUSES.map((s) => <option key={s}>{s}</option>)}
-            </select>
+            <Select value={form.status} onChange={(v) => setForm({ ...form, status: v })} options={STATUSES} />
           </div>
           <div>
             <label className={labelCls}>Assign To</label>
-            <select value={form.assignedTo} onChange={(e) => setForm({ ...form, assignedTo: e.target.value })} className={inputCls}>
-              <option value="">Unassigned</option>
-              {usersQuery.data?.map((u: User) => (
-                <option key={u._id} value={u._id}>{u.name}</option>
-              ))}
-            </select>
+            <Select
+              value={form.assignedTo}
+              onChange={(v) => setForm({ ...form, assignedTo: v })}
+              options={[{ value: '', label: 'Unassigned' }, ...(usersQuery.data || []).map((u: User) => ({ value: u._id, label: u.name }))]}
+            />
           </div>
           <div>
             <label className={labelCls}>Tags</label>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, Bell, Moon, Sun, LogOut, User as UserIcon, ChevronRight, Search } from 'lucide-react';
+import { Menu, Bell, Moon, Sun, LogOut, User as UserIcon, ChevronRight } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
+import GlobalSearch from '../common/GlobalSearch';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -59,20 +60,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Search hint */}
-          <button
-            onClick={() => navigate('/leads')}
-            className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl
-              bg-surface-100/80 dark:bg-dark-800/80 border border-surface-200/60 dark:border-dark-700
-              text-surface-400 dark:text-dark-500 text-sm hover:border-surface-300
-              dark:hover:border-dark-600 transition-colors w-52"
-          >
-            <Search className="w-3.5 h-3.5" />
-            <span className="flex-1 text-left">Search…</span>
-            <kbd className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-white dark:bg-dark-700 border border-surface-200 dark:border-dark-600 text-surface-400">
-              /
-            </kbd>
-          </button>
+          {/* Global search */}
+          <div className="w-36 sm:w-48 lg:w-60 xl:w-72 min-w-0">
+            <GlobalSearch />
+          </div>
 
           <button
             onClick={toggleDarkMode}

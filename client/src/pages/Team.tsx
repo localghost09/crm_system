@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Plus, Search, Pencil, Trash2, UserCircle, Shield, Briefcase } from 'lucide-react';
 import api from '../services/api';
 import Badge from '../components/common/Badge';
 import Modal from '../components/common/Modal';
+import Select from '../components/common/Select';
 import ConfirmDialog from '../components/common/ConfirmDialog';
 import { useDebounce } from '../hooks/useDebounce';
 import { getErrorMessage, getInitials } from '../utils/helpers';
@@ -35,9 +37,16 @@ const Team: React.FC = () => {
   const queryClient = useQueryClient();
   const { user: currentUser } = useAuth();
   const isAdmin = currentUser?.role === 'admin';
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
   const debouncedSearch = useDebounce(search, 400);
   const [role, setRole] = useState('');
+
+  // Deep-link support: /team?search=foo (used by the global search box)
+  const urlSearch = searchParams.get('search');
+  useEffect(() => {
+    if (urlSearch !== null) setSearch(urlSearch);
+  }, [urlSearch]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<User | null>(null);
   const [deleting, setDeleting] = useState<User | null>(null);
@@ -142,12 +151,17 @@ const Team: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search team members..." className="input-field pl-10" />
           </div>
-          <select value={role} onChange={(e) => setRole(e.target.value)} className="input-field sm:w-44">
-            <option value="">All Roles</option>
-            <option value="admin">Admin</option>
-            <option value="manager">Manager</option>
-            <option value="executive">Executive</option>
-          </select>
+          <Select
+            value={role}
+            onChange={(v) => setRole(v)}
+            options={[
+              { value: '', label: 'All Roles' },
+              { value: 'admin', label: 'Admin' },
+              { value: 'manager', label: 'Manager' },
+              { value: 'executive', label: 'Executive' },
+            ]}
+            className="sm:w-44"
+          />
         </div>
       </div>
 
@@ -221,11 +235,15 @@ const Team: React.FC = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={labelCls}>Role *</label>
-              <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} className={inputCls}>
-                <option value="executive">Executive</option>
-                <option value="manager">Manager</option>
-                <option value="admin">Admin</option>
-              </select>
+              <Select
+                value={form.role}
+                onChange={(v) => setForm({ ...form, role: v })}
+                options={[
+                  { value: 'executive', label: 'Executive' },
+                  { value: 'manager', label: 'Manager' },
+                  { value: 'admin', label: 'Admin' },
+                ]}
+              />
             </div>
             <div>
               <label className={labelCls}>Phone</label>

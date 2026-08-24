@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { Plus, Search, CheckCircle2, Circle, Clock, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Search, CheckCircle2, Circle, Clock, Pencil, Trash2, RefreshCw } from 'lucide-react';
 import api from '../services/api';
 import Badge from '../components/common/Badge';
 import Modal from '../components/common/Modal';
+import Select from '../components/common/Select';
+import DatePicker from '../components/common/DatePicker';
 import ConfirmDialog from '../components/common/ConfirmDialog';
 import Pagination from '../components/common/Pagination';
 import EmptyState from '../components/common/EmptyState';
@@ -31,17 +34,27 @@ const emptyForm: TaskForm = {
 
 const Tasks: React.FC = () => {
   const queryClient = useQueryClient();
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
   const debouncedSearch = useDebounce(search, 400);
   const [status, setStatus] = useState('');
   const [priority, setPriority] = useState('');
   const [page, setPage] = useState(1);
+
+  // Deep-link support: /tasks?search=foo (used by the global search box)
+  const urlSearch = searchParams.get('search');
+  useEffect(() => {
+    if (urlSearch !== null) {
+      setSearch(urlSearch);
+      setPage(1);
+    }
+  }, [urlSearch]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Task | null>(null);
   const [deleting, setDeleting] = useState<Task | null>(null);
   const [form, setForm] = useState<TaskForm>(emptyForm);
 
-  const { data: tasksData, isLoading } = useQuery({
+  const { data: tasksData, isLoading, isError, refetch } = useQuery({
     queryKey: ['tasks', { page, status, priority, search: debouncedSearch }],
     queryFn: async () => {
       const params: any = { page, limit: 10 };
@@ -142,20 +155,20 @@ const Tasks: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Search tasks..." className="input-field pl-10" />
           </div>
-          <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} className="input-field sm:w-40">
-            <option value="">All Status</option>
-            {STATUSES.map((s) => <option key={s}>{s}</option>)}
-          </select>
-          <select value={priority} onChange={(e) => { setPriority(e.target.value); setPage(1); }} className="input-field sm:w-40">
-            <option value="">All Priority</option>
-            {PRIORITIES.map((s) => <option key={s}>{s}</option>)}
-          </select>
+          <Select value={status} onChange={(v) => { setStatus(v); setPage(1); }} options={STATUSES} placeholder="All Status" className="sm:w-40" />
+          <Select value={priority} onChange={(v) => { setPriority(v); setPage(1); }} options={PRIORITIES} placeholder="All Priority" className="sm:w-40" />
         </div>
       </div>
 
       <div className="card">
         {isLoading ? (
           <TableSkeleton />
+        ) : isError ? (
+          <EmptyState
+            title="Couldn't load tasks"
+            description="Something went wrong while fetching data. Check your connection and try again."
+            action={<button onClick={() => refetch()} className="btn-primary"><RefreshCw className="w-4 h-4 mr-1" /> Retry</button>}
+          />
         ) : tasksData?.data?.length === 0 ? (
           <EmptyState
             title="No tasks found"
@@ -231,26 +244,23 @@ const Tasks: React.FC = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={labelCls}>Assign To</label>
-              <select value={form.assignedTo} onChange={(e) => setForm({ ...form, assignedTo: e.target.value })} className={inputCls}>
-                <option value="">Unassigned</option>
-                {usersQuery.data?.map((u) => <option key={u._id} value={u._id}>{u.name}</option>)}
-              </select>
+              <Select
+                value={form.assignedTo}
+                onChange={(v) => setForm({ ...form, assignedTo: v })}
+                options={[{ value: '', label: 'Unassigned' }, ...(usersQuery.data || []).map((u) => ({ value: u._id, label: u.name }))]}
+              />
             </div>
             <div>
               <label className={labelCls}>Priority</label>
-              <select value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })} className={inputCls}>
-                {PRIORITIES.map((p) => <option key={p}>{p}</option>)}
-              </select>
+              <Select value={form.priority} onChange={(v) => setForm({ ...form, priority: v })} options={PRIORITIES} />
             </div>
             <div>
               <label className={labelCls}>Due Date</label>
-              <input type="date" value={form.dueDate} onChange={(e) => setForm({ ...form, dueDate: e.target.value })} className={inputCls} />
+              <DatePicker value={form.dueDate} onChange={(v) => setForm({ ...form, dueDate: v })} placeholder="Select due date" />
             </div>
             <div>
               <label className={labelCls}>Status</label>
-              <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className={inputCls}>
-                {STATUSES.map((s) => <option key={s}>{s}</option>)}
-              </select>
+              <Select value={form.status} onChange={(v) => setForm({ ...form, status: v })} options={STATUSES} />
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2">

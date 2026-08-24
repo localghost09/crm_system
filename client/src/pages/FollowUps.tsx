@@ -5,6 +5,8 @@ import { Plus, Search, Phone, Video, Mail, Users as UsersIcon, CheckCircle2, XCi
 import api from '../services/api';
 import Badge from '../components/common/Badge';
 import Modal from '../components/common/Modal';
+import Select from '../components/common/Select';
+import DatePicker from '../components/common/DatePicker';
 import Pagination from '../components/common/Pagination';
 import EmptyState from '../components/common/EmptyState';
 import { TableSkeleton } from '../components/common/Skeleton';
@@ -146,10 +148,7 @@ const FollowUps: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search follow-ups..." className="input-field pl-10" />
           </div>
-          <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} className="input-field sm:w-44">
-            <option value="">All Status</option>
-            {STATUSES.map((s) => <option key={s}>{s}</option>)}
-          </select>
+          <Select value={status} onChange={(v) => { setStatus(v); setPage(1); }} options={STATUSES} placeholder="All Status" className="sm:w-44" />
         </div>
       </div>
 
@@ -232,15 +231,11 @@ const FollowUps: React.FC = () => {
           </div>
           <div>
             <label className={labelCls}>Type</label>
-            <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className={inputCls}>
-              {['Phone Call', 'Meeting', 'Email', 'Product Demo', 'Follow-up', 'Other'].map((t) => <option key={t}>{t}</option>)}
-            </select>
+            <Select value={form.type} onChange={(v) => setForm({ ...form, type: v })} options={['Phone Call', 'Meeting', 'Email', 'Product Demo', 'Follow-up', 'Other']} />
           </div>
           <div>
             <label className={labelCls}>Status</label>
-            <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className={inputCls}>
-              {STATUSES.map((s) => <option key={s}>{s}</option>)}
-            </select>
+            <Select value={form.status} onChange={(v) => setForm({ ...form, status: v })} options={STATUSES} />
           </div>
           <div className="sm:col-span-2">
             <label className={labelCls}>Description</label>
@@ -248,35 +243,39 @@ const FollowUps: React.FC = () => {
           </div>
           <div>
             <label className={labelCls}>Assign To</label>
-            <select value={form.assignedTo} onChange={(e) => setForm({ ...form, assignedTo: e.target.value })} className={inputCls}>
-              <option value="">Unassigned</option>
-              {usersQuery.data?.map((u) => <option key={u._id} value={u._id}>{u.name}</option>)}
-            </select>
+            <Select
+              value={form.assignedTo}
+              onChange={(v) => setForm({ ...form, assignedTo: v })}
+              options={[{ value: '', label: 'Unassigned' }, ...(usersQuery.data || []).map((u) => ({ value: u._id, label: u.name }))]}
+            />
           </div>
           <div>
             <label className={labelCls}>Date & Time *</label>
-            <input required type="datetime-local" value={form.followUpDate} onChange={(e) => setForm({ ...form, followUpDate: e.target.value })} className={inputCls} />
+            <DatePicker value={form.followUpDate} onChange={(v) => setForm({ ...form, followUpDate: v })} withTime placeholder="Pick date & time" />
           </div>
           <div>
             <label className={labelCls}>Lead</label>
-            <select value={form.lead} onChange={(e) => setForm({ ...form, lead: e.target.value })} className={inputCls}>
-              <option value="">—</option>
-              {leadsQuery.data?.map((l) => <option key={l._id} value={l._id}>{l.name}</option>)}
-            </select>
+            <Select
+              value={form.lead}
+              onChange={(v) => setForm({ ...form, lead: v })}
+              options={[{ value: '', label: '—' }, ...(leadsQuery.data || []).map((l) => ({ value: l._id, label: l.name }))]}
+            />
           </div>
           <div>
             <label className={labelCls}>Customer</label>
-            <select value={form.customer} onChange={(e) => setForm({ ...form, customer: e.target.value })} className={inputCls}>
-              <option value="">—</option>
-              {customersQuery.data?.map((c) => <option key={c._id} value={c._id}>{c.name}</option>)}
-            </select>
+            <Select
+              value={form.customer}
+              onChange={(v) => setForm({ ...form, customer: v })}
+              options={[{ value: '', label: '—' }, ...(customersQuery.data || []).map((c) => ({ value: c._id, label: c.name }))]}
+            />
           </div>
           <div>
             <label className={labelCls}>Opportunity</label>
-            <select value={form.opportunity} onChange={(e) => setForm({ ...form, opportunity: e.target.value })} className={inputCls}>
-              <option value="">—</option>
-              {oppsQuery.data?.map((o) => <option key={o._id} value={o._id}>{o.title}</option>)}
-            </select>
+            <Select
+              value={form.opportunity}
+              onChange={(v) => setForm({ ...form, opportunity: v })}
+              options={[{ value: '', label: '—' }, ...(oppsQuery.data || []).map((o) => ({ value: o._id, label: o.title }))]}
+            />
           </div>
           <div className="sm:col-span-2 flex justify-end gap-3 pt-2">
             <button type="button" onClick={() => setModalOpen(false)} className="btn-secondary">Cancel</button>
