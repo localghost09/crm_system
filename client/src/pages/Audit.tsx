@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Shield, Search } from 'lucide-react';
 import api from '../services/api';
 import Badge from '../components/common/Badge';
+import Select from '../components/common/Select';
 import Pagination from '../components/common/Pagination';
 import EmptyState from '../components/common/EmptyState';
 import { TableSkeleton } from '../components/common/Skeleton';
@@ -53,12 +54,15 @@ const Audit: React.FC = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Search by action..." className="input-field pl-10" />
           </div>
-          <select value={entity} onChange={(e) => { setEntity(e.target.value); setPage(1); }} className="input-field sm:w-44">
-            <option value="">All Entities</option>
-            {['Lead', 'Customer', 'Opportunity', 'Task', 'FollowUp', 'User', 'Auth'].map((e) => (
-              <option key={e} value={e}>{e}</option>
-            ))}
-          </select>
+          <Select
+            value={entity}
+            onChange={(v) => { setEntity(v); setPage(1); }}
+            options={[
+              { value: '', label: 'All Entities' },
+              'Lead', 'Customer', 'Opportunity', 'Task', 'FollowUp', 'User', 'Auth',
+            ]}
+            className="sm:w-44"
+          />
         </div>
       </div>
 

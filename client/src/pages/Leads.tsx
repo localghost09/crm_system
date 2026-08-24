@@ -1,10 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Plus, Search, Pencil, Trash2, Eye, RefreshCw, UserPlus, FileOutput } from 'lucide-react';
 import api from '../services/api';
 import Badge from '../components/common/Badge';
 import Modal from '../components/common/Modal';
+import Select from '../components/common/Select';
 import ConfirmDialog from '../components/common/ConfirmDialog';
 import Pagination from '../components/common/Pagination';
 import EmptyState from '../components/common/EmptyState';
@@ -39,12 +41,22 @@ const emptyForm: LeadForm = {
 
 const Leads: React.FC = () => {
   const queryClient = useQueryClient();
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
   const debouncedSearch = useDebounce(search, 400);
   const [status, setStatus] = useState('');
   const [source, setSource] = useState('');
   const [priority, setPriority] = useState('');
   const [page, setPage] = useState(1);
+
+  // Deep-link support: /leads?search=foo (used by the global search box)
+  const urlSearch = searchParams.get('search');
+  useEffect(() => {
+    if (urlSearch !== null) {
+      setSearch(urlSearch);
+      setPage(1);
+    }
+  }, [urlSearch]);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
@@ -63,7 +75,7 @@ const Leads: React.FC = () => {
     enabled: false, // lazy, fetch when needed
   });
 
-  const { data: leadData, isLoading } = useQuery({
+  const { data: leadData, isLoading, isError, refetch } = useQuery({
     queryKey: ['leads', { page, status, source, priority, search: debouncedSearch }],
     queryFn: async () => {
       const params: any = { page, limit: 10 };
@@ -254,18 +266,9 @@ const Leads: React.FC = () => {
               className="input-field pl-10"
             />
           </div>
-          <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} className="input-field sm:w-40">
-            <option value="">All Status</option>
-            {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
-          <select value={source} onChange={(e) => { setSource(e.target.value); setPage(1); }} className="input-field sm:w-40">
-            <option value="">All Sources</option>
-            {SOURCES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
-          <select value={priority} onChange={(e) => { setPriority(e.target.value); setPage(1); }} className="input-field sm:w-40">
-            <option value="">All Priorities</option>
-            {PRIORITIES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
+          <Select value={status} onChange={(v) => { setStatus(v); setPage(1); }} options={STATUSES} placeholder="All Status" className="sm:w-40" />
+          <Select value={source} onChange={(v) => { setSource(v); setPage(1); }} options={SOURCES} placeholder="All Sources" className="sm:w-40" />
+          <Select value={priority} onChange={(v) => { setPriority(v); setPage(1); }} options={PRIORITIES} placeholder="All Priorities" className="sm:w-40" />
         </div>
       </div>
 
@@ -273,6 +276,12 @@ const Leads: React.FC = () => {
       <div className="card">
         {isLoading ? (
           <TableSkeleton />
+        ) : isError ? (
+          <EmptyState
+            title="Couldn't load leads"
+            description="Something went wrong while fetching data. Check your connection and try again."
+            action={<button onClick={() => refetch()} className="btn-primary"><RefreshCw className="w-4 h-4 mr-1" /> Retry</button>}
+          />
         ) : leadData?.data?.length === 0 ? (
           <EmptyState
             title="No leads found"
@@ -400,9 +409,7 @@ const Leads: React.FC = () => {
           </div>
           <div>
             <label className={labelCls}>Source</label>
-            <select value={form.source} onChange={(e) => setForm({ ...form, source: e.target.value })} className={inputCls}>
-              {SOURCES.map((s) => <option key={s}>{s}</option>)}
-            </select>
+            <Select value={form.source} onChange={(v) => setForm({ ...form, source: v })} options={SOURCES} />
           </div>
           <div>
             <label className={labelCls}>Industry</label>
@@ -410,15 +417,11 @@ const Leads: React.FC = () => {
           </div>
           <div>
             <label className={labelCls}>Status</label>
-            <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className={inputCls}>
-              {STATUSES.map((s) => <option key={s}>{s}</option>)}
-            </select>
+            <Select value={form.status} onChange={(v) => setForm({ ...form, status: v })} options={STATUSES} />
           </div>
           <div>
             <label className={labelCls}>Priority</label>
-            <select value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })} className={inputCls}>
-              {PRIORITIES.map((s) => <option key={s}>{s}</option>)}
-            </select>
+            <Select value={form.priority} onChange={(v) => setForm({ ...form, priority: v })} options={PRIORITIES} />
           </div>
           <div>
             <label className={labelCls}>Estimated Value ($)</label>
@@ -426,12 +429,11 @@ const Leads: React.FC = () => {
           </div>
           <div>
             <label className={labelCls}>Assign To</label>
-            <select value={form.assignedTo} onChange={(e) => setForm({ ...form, assignedTo: e.target.value })} className={inputCls}>
-              <option value="">Unassigned</option>
-              {usersQuery.data?.map((u: User) => (
-                <option key={u._id} value={u._id}>{u.name} ({u.role})</option>
-              ))}
-            </select>
+            <Select
+              value={form.assignedTo}
+              onChange={(v) => setForm({ ...form, assignedTo: v })}
+              options={[{ value: '', label: 'Unassigned' }, ...(usersQuery.data || []).map((u: User) => ({ value: u._id, label: `${u.name} (${u.role})` }))]}
+            />
           </div>
           <div className="sm:col-span-2">
             <label className={labelCls}>Tags (comma separated)</label>
@@ -539,13 +541,11 @@ const Leads: React.FC = () => {
             <div>
               <h4 className="text-sm font-semibold text-surface-700 dark:text-dark-200 mb-2">Record Interaction</h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <select
+                <Select
                   value={interactionForm.type}
-                  onChange={(e) => setInteractionForm({ ...interactionForm, type: e.target.value })}
-                  className="input-field"
-                >
-                  {['Phone Call', 'Email', 'Meeting', 'Note', 'Other'].map((t) => <option key={t}>{t}</option>)}
-                </select>
+                  onChange={(v) => setInteractionForm({ ...interactionForm, type: v })}
+                  options={['Phone Call', 'Email', 'Meeting', 'Note', 'Other']}
+                />
                 <input
                   value={interactionForm.subject}
                   onChange={(e) => setInteractionForm({ ...interactionForm, subject: e.target.value })}

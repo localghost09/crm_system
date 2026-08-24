@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Plus, DollarSign, Calendar, User as UserIcon, GripVertical, Search } from 'lucide-react';
 import api from '../services/api';
 import Badge from '../components/common/Badge';
 import Modal from '../components/common/Modal';
+import Select from '../components/common/Select';
+import DatePicker from '../components/common/DatePicker';
 import EmptyState from '../components/common/EmptyState';
 import { PageSkeleton } from '../components/common/Skeleton';
 import { formatCurrency, formatDate, getErrorMessage } from '../utils/helpers';
@@ -45,8 +48,15 @@ const Pipeline: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Opportunity | null>(null);
   const [form, setForm] = useState<OppForm>(emptyForm);
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
   const [expanded, setExpanded] = useState<Opportunity | null>(null);
+
+  // Deep-link support: /pipeline?search=foo (used by the global search box)
+  const urlSearch = searchParams.get('search');
+  useEffect(() => {
+    if (urlSearch !== null) setSearch(urlSearch);
+  }, [urlSearch]);
 
   const { data: pipelineData, isLoading } = useQuery({
     queryKey: ['opportunities', 'pipeline'],
@@ -303,30 +313,31 @@ const Pipeline: React.FC = () => {
           </div>
           <div>
             <label className={labelCls}>Customer</label>
-            <select value={form.customer} onChange={(e) => setForm({ ...form, customer: e.target.value })} className={inputCls}>
-              <option value="">—</option>
-              {customersQuery.data?.map((c) => <option key={c._id} value={c._id}>{c.name}</option>)}
-            </select>
+            <Select
+              value={form.customer}
+              onChange={(v) => setForm({ ...form, customer: v })}
+              options={[{ value: '', label: '—' }, ...(customersQuery.data || []).map((c) => ({ value: c._id, label: c.name }))]}
+            />
           </div>
           <div>
             <label className={labelCls}>Lead</label>
-            <select value={form.lead} onChange={(e) => setForm({ ...form, lead: e.target.value })} className={inputCls}>
-              <option value="">—</option>
-              {leadsQuery.data?.map((l) => <option key={l._id} value={l._id}>{l.name}</option>)}
-            </select>
+            <Select
+              value={form.lead}
+              onChange={(v) => setForm({ ...form, lead: v })}
+              options={[{ value: '', label: '—' }, ...(leadsQuery.data || []).map((l) => ({ value: l._id, label: l.name }))]}
+            />
           </div>
           <div>
             <label className={labelCls}>Stage</label>
-            <select value={form.stage} onChange={(e) => setForm({ ...form, stage: e.target.value })} className={inputCls}>
-              {STAGES.map((s) => <option key={s}>{s}</option>)}
-            </select>
+            <Select value={form.stage} onChange={(v) => setForm({ ...form, stage: v })} options={STAGES} />
           </div>
           <div>
             <label className={labelCls}>Assigned To</label>
-            <select value={form.assignedTo} onChange={(e) => setForm({ ...form, assignedTo: e.target.value })} className={inputCls}>
-              <option value="">Unassigned</option>
-              {usersQuery.data?.map((u) => <option key={u._id} value={u._id}>{u.name}</option>)}
-            </select>
+            <Select
+              value={form.assignedTo}
+              onChange={(v) => setForm({ ...form, assignedTo: v })}
+              options={[{ value: '', label: 'Unassigned' }, ...(usersQuery.data || []).map((u) => ({ value: u._id, label: u.name }))]}
+            />
           </div>
           <div>
             <label className={labelCls}>Expected Value ($)</label>
@@ -338,7 +349,7 @@ const Pipeline: React.FC = () => {
           </div>
           <div className="sm:col-span-2">
             <label className={labelCls}>Expected Closing Date</label>
-            <input type="date" value={form.expectedClosingDate} onChange={(e) => setForm({ ...form, expectedClosingDate: e.target.value })} className={inputCls} />
+            <DatePicker value={form.expectedClosingDate} onChange={(v) => setForm({ ...form, expectedClosingDate: v })} placeholder="Select closing date" />
           </div>
           <div className="sm:col-span-2 flex justify-end gap-3 pt-2">
             <button type="button" onClick={() => setModalOpen(false)} className="btn-secondary">Cancel</button>

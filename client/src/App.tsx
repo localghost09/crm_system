@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import AppLayout from './layouts/AppLayout';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Lazy-loaded routes for performance
 const Login = lazy(() => import('./pages/Login'));
@@ -17,6 +18,7 @@ const Notifications = lazy(() => import('./pages/Notifications'));
 const Team = lazy(() => import('./pages/Team'));
 const Audit = lazy(() => import('./pages/Audit'));
 const Settings = lazy(() => import('./pages/Settings'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 const PageLoader = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
@@ -48,106 +50,108 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; roles?: string[] }> 
 
 const App: React.FC = () => {
   return (
-    <Suspense fallback={<PageLoader />}>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+    <ErrorBoundary>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/leads"
-            element={
-              <ProtectedRoute>
-                <Leads />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/customers"
-            element={
-              <ProtectedRoute>
-                <Customers />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/pipeline"
-            element={
-              <ProtectedRoute>
-                <Pipeline />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/tasks"
-            element={
-              <ProtectedRoute>
-                <Tasks />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/followups"
-            element={
-              <ProtectedRoute>
-                <FollowUps />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/notifications"
-            element={
-              <ProtectedRoute>
-                <Notifications />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/reports"
-            element={
-              <ProtectedRoute roles={['admin', 'manager']}>
-                <Reports />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/team"
-            element={
-              <ProtectedRoute roles={['admin', 'manager']}>
-                <Team />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/audit"
-            element={
-              <ProtectedRoute roles={['admin']}>
-                <Audit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <Settings />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/leads"
+              element={
+                <ProtectedRoute>
+                  <Leads />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/customers"
+              element={
+                <ProtectedRoute>
+                  <Customers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pipeline"
+              element={
+                <ProtectedRoute>
+                  <Pipeline />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/tasks"
+              element={
+                <ProtectedRoute>
+                  <Tasks />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/followups"
+              element={
+                <ProtectedRoute>
+                  <FollowUps />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/notifications"
+              element={
+                <ProtectedRoute>
+                  <Notifications />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reports"
+              element={
+                <ProtectedRoute roles={['admin', 'manager']}>
+                  <Reports />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/team"
+              element={
+                <ProtectedRoute roles={['admin', 'manager']}>
+                  <Team />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/audit"
+              element={
+                <ProtectedRoute roles={['admin']}>
+                  <Audit />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
 
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
-      </Routes>
-    </Suspense>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
