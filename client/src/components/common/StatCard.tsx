@@ -9,26 +9,56 @@ interface StatCardProps {
   subtext?: string;
 }
 
-const colorMap: Record<string, string> = {
-  blue: 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400',
-  green: 'bg-green-100 text-green-600 dark:bg-green-900/40 dark:text-green-400',
-  purple: 'bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-400',
-  yellow: 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/40 dark:text-yellow-400',
-  red: 'bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400',
-  indigo: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400',
+const colorMap: Record<string, { well: string; glow: string }> = {
+  blue: {
+    well: 'bg-sky-50 text-sky-600 dark:bg-sky-500/15 dark:text-sky-400',
+    glow: 'from-sky-500/10',
+  },
+  green: {
+    well: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400',
+    glow: 'from-emerald-500/10',
+  },
+  purple: {
+    well: 'bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-400',
+    glow: 'from-violet-500/10',
+  },
+  yellow: {
+    well: 'bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400',
+    glow: 'from-amber-500/10',
+  },
+  red: {
+    well: 'bg-red-50 text-red-600 dark:bg-red-500/15 dark:text-red-400',
+    glow: 'from-red-500/10',
+  },
+  indigo: {
+    well: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-400',
+    glow: 'from-indigo-500/10',
+  },
 };
 
 const StatCard: React.FC<StatCardProps> = ({ label, value, icon: Icon, color = 'blue', subtext }) => {
+  const styles = colorMap[color] || colorMap.blue;
+
   return (
-    <div className="card p-5 hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between">
+    <div className="card p-5 relative overflow-hidden group hover:shadow-card-hover transition-all duration-300">
+      {/* Soft gradient accent */}
+      <div
+        className={`absolute -top-8 -right-8 w-28 h-28 rounded-full bg-gradient-to-br ${styles.glow} to-transparent opacity-80 group-hover:scale-110 transition-transform duration-500`}
+        aria-hidden
+      />
+
+      <div className="relative flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-500 dark:text-dark-400 truncate">{label}</p>
-          <p className="mt-2 text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
-          {subtext && <p className="mt-1 text-xs text-gray-500 dark:text-dark-400">{subtext}</p>}
+          <p className="text-sm font-medium text-surface-500 dark:text-dark-400 truncate">{label}</p>
+          <p className="mt-2 text-2xl font-bold font-display tracking-tight text-surface-900 dark:text-white">
+            {value}
+          </p>
+          {subtext && (
+            <p className="mt-1.5 text-xs font-medium text-surface-400 dark:text-dark-500">{subtext}</p>
+          )}
         </div>
-        <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${colorMap[color] || colorMap.blue}`}>
-          <Icon className="w-5 h-5" />
+        <div className={`icon-well ${styles.well}`}>
+          <Icon className="w-5 h-5" strokeWidth={2} />
         </div>
       </div>
     </div>

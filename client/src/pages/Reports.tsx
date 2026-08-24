@@ -10,7 +10,18 @@ import api from '../services/api';
 import { PageSkeleton } from '../components/common/Skeleton';
 import { formatCurrency, downloadCSV } from '../utils/helpers';
 
-const COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#6366f1'];
+const COLORS = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#6366f1', '#ec4899'];
+
+const chartTooltipStyle = {
+  contentStyle: {
+    background: 'rgba(255,255,255,0.95)',
+    border: '1px solid #e4e4e7',
+    borderRadius: '12px',
+    boxShadow: '0 10px 40px -10px rgba(0,0,0,0.12)',
+    fontSize: '12px',
+    padding: '10px 14px',
+  },
+};
 
 const Reports: React.FC = () => {
   const [startDate, setStartDate] = useState('');
@@ -123,55 +134,54 @@ const Reports: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card p-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-100 dark:bg-green-900/40 rounded-lg flex items-center justify-center">
-              <DollarSign className="w-5 h-5 text-green-600 dark:text-green-400" />
+            <div className="icon-well bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400">
+              <DollarSign className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-gray-500 dark:text-dark-400">Total Revenue</p>
-              <p className="text-xl font-bold text-gray-900 dark:text-white">{formatCurrency(totalRevenue)}</p>
+              <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Total Revenue</p>
+              <p className="text-xl font-display font-bold text-surface-900 dark:text-white">{formatCurrency(totalRevenue)}</p>
             </div>
           </div>
         </div>
         <div className="card p-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/40 rounded-lg flex items-center justify-center">
-              <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <div className="icon-well bg-sky-50 text-sky-600 dark:bg-sky-500/15 dark:text-sky-400">
+              <Target className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-gray-500 dark:text-dark-400">Deals Won</p>
-              <p className="text-xl font-bold text-gray-900 dark:text-white">{totalWon}</p>
+              <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Deals Won</p>
+              <p className="text-xl font-display font-bold text-surface-900 dark:text-white">{totalWon}</p>
             </div>
           </div>
         </div>
         <div className="card p-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/40 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            <div className="icon-well bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-400">
+              <TrendingUp className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-gray-500 dark:text-dark-400">Avg Deal Value</p>
-              <p className="text-xl font-bold text-gray-900 dark:text-white">{formatCurrency(avgDealValue)}</p>
+              <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Avg Deal Value</p>
+              <p className="text-xl font-display font-bold text-surface-900 dark:text-white">{formatCurrency(avgDealValue)}</p>
             </div>
           </div>
         </div>
         <div className="card p-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/40 rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+            <div className="icon-well bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400">
+              <Users className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-gray-500 dark:text-dark-400">Active Reps</p>
-              <p className="text-xl font-bold text-gray-900 dark:text-white">{performance.length}</p>
+              <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Active Reps</p>
+              <p className="text-xl font-display font-bold text-surface-900 dark:text-white">{performance.length}</p>
             </div>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Sales rep performance */}
-        <div className="card">
+        <div className="card overflow-hidden">
           <div className="card-header">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Revenue by Employee</h3>
+            <h3 className="font-display font-bold text-surface-900 dark:text-white">Revenue by Employee</h3>
           </div>
           <div className="p-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
@@ -179,68 +189,65 @@ const Reports: React.FC = () => {
                 name: p.user?.name?.split(' ')[0] || 'Unknown',
                 revenue: p.revenue || 0,
                 pipeline: p.pipelineValue || 0,
-              }))}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis tickFormatter={(v) => `$${v/1000}k`} />
-                <Tooltip formatter={(v) => formatCurrency(Number(v))} />
+              }))} barCategoryGap="20%">
+                <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
+                <XAxis dataKey="name" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis tickFormatter={(v) => `$${v/1000}k`} stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip formatter={(v) => formatCurrency(Number(v))} {...chartTooltipStyle} />
                 <Legend />
-                <Bar dataKey="revenue" fill="#10b981" radius={[4,4,0,0]} />
-                <Bar dataKey="pipeline" fill="#3b82f6" radius={[4,4,0,0]} />
+                <Bar dataKey="revenue" fill="#10b981" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="pipeline" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Monthly revenue */}
-        <div className="card">
+        <div className="card overflow-hidden">
           <div className="card-header">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Monthly Revenue Trend</h3>
+            <h3 className="font-display font-bold text-surface-900 dark:text-white">Monthly Revenue Trend</h3>
           </div>
           <div className="p-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={monthlyRevenue}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis tickFormatter={(v) => `$${v/1000}k`} />
-                <Tooltip formatter={(v) => formatCurrency(Number(v))} />
-                <Line type="monotone" dataKey="revenue" stroke="#8b5cf6" strokeWidth={2.5} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
+                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis tickFormatter={(v) => `$${v/1000}k`} stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip formatter={(v) => formatCurrency(Number(v))} {...chartTooltipStyle} />
+                <Line type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={2.5} dot={{ r: 3.5, fill: '#7c3aed' }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Leads by source */}
-        <div className="card">
+        <div className="card overflow-hidden">
           <div className="card-header">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Leads by Source</h3>
+            <h3 className="font-display font-bold text-surface-900 dark:text-white">Leads by Source</h3>
           </div>
           <div className="p-4 h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={leadSourceData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                <Pie data={leadSourceData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3} strokeWidth={0}>
                   {leadSourceData.map((_: any, i: number) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                 </Pie>
-                <Tooltip />
+                <Tooltip {...chartTooltipStyle} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Customer growth */}
-        <div className="card">
+        <div className="card overflow-hidden">
           <div className="card-header">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Customer Growth</h3>
+            <h3 className="font-display font-bold text-surface-900 dark:text-white">Customer Growth</h3>
           </div>
           <div className="p-4 h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={customerGrowthData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="customers" fill="#06b6d4" radius={[4,4,0,0]} />
+              <BarChart data={customerGrowthData} barCategoryGap="20%">
+                <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
+                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip {...chartTooltipStyle} />
+                <Bar dataKey="customers" fill="#06b6d4" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

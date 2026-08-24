@@ -122,7 +122,7 @@ const Tasks: React.FC = () => {
   };
 
   const inputCls = 'input-field';
-  const labelCls = 'block text-sm font-medium text-gray-700 dark:text-dark-300 mb-1.5';
+  const labelCls = 'label-field';
 
   return (
     <div className="page-container">
@@ -139,7 +139,7 @@ const Tasks: React.FC = () => {
       <div className="card p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Search tasks..." className="input-field pl-10" />
           </div>
           <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} className="input-field sm:w-40">
@@ -167,7 +167,7 @@ const Tasks: React.FC = () => {
             <div className="table-container">
               <table className="table">
                 <thead>
-                  <tr className="bg-gray-50 dark:bg-dark-900">
+                  <tr className="bg-surface-50 dark:bg-dark-900">
                     <th className="w-10"></th>
                     <th>Task</th>
                     <th>Assignee</th>
@@ -181,29 +181,29 @@ const Tasks: React.FC = () => {
                   {tasksData?.data?.map((task: Task) => (
                     <tr key={task._id}>
                       <td>
-                        <button onClick={() => toggleStatus(task)} className="text-gray-400 hover:text-green-600 transition-colors">
+                        <button onClick={() => toggleStatus(task)} className="text-surface-400 hover:text-green-600 transition-colors">
                           {task.status === 'Completed' ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : <Circle className="w-5 h-5" />}
                         </button>
                       </td>
                       <td>
-                        <p className={`font-medium ${task.status === 'Completed' ? 'line-through text-gray-400' : 'text-gray-900 dark:text-white'}`}>{task.title}</p>
-                        {task.description && <p className="text-xs text-gray-500 dark:text-dark-400 truncate max-w-xs">{task.description}</p>}
+                        <p className={`font-medium ${task.status === 'Completed' ? 'line-through text-surface-400' : 'text-surface-900 dark:text-white'}`}>{task.title}</p>
+                        {task.description && <p className="text-xs text-surface-500 dark:text-dark-400 truncate max-w-xs">{task.description}</p>}
                       </td>
-                      <td>{task.assignedTo?.name || <span className="text-gray-400">Unassigned</span>}</td>
+                      <td>{task.assignedTo?.name || <span className="text-surface-400">Unassigned</span>}</td>
                       <td><Badge color={getPriorityColor(task.priority)}>{task.priority}</Badge></td>
                       <td>
                         <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3 text-gray-400" />
+                          <Clock className="w-3 h-3 text-surface-400" />
                           {formatDate(task.dueDate)}
                         </span>
                       </td>
                       <td><Badge color={getStatusColor(task.status)}>{task.status}</Badge></td>
                       <td>
                         <div className="flex items-center justify-end gap-1">
-                          <button onClick={() => openEdit(task)} className="p-1.5 rounded-lg text-gray-400 hover:text-primary-600 hover:bg-primary-50">
+                          <button onClick={() => openEdit(task)} className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
                             <Pencil className="w-4 h-4" />
                           </button>
-                          <button onClick={() => setDeleting(task)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50">
+                          <button onClick={() => setDeleting(task)} className="p-1.5 rounded-xl text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>

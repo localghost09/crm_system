@@ -19,8 +19,12 @@ const Audit = lazy(() => import('./pages/Audit'));
 const Settings = lazy(() => import('./pages/Settings'));
 
 const PageLoader = () => (
-  <div className="min-h-[60vh] flex items-center justify-center">
-    <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
+  <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
+    <div className="relative">
+      <div className="w-11 h-11 rounded-full border-[3px] border-primary-100 dark:border-primary-900" />
+      <div className="absolute inset-0 w-11 h-11 rounded-full border-[3px] border-primary-600 border-t-transparent animate-spin" />
+    </div>
+    <p className="text-xs font-medium text-surface-400 dark:text-dark-500">Loading…</p>
   </div>
 );
 
@@ -28,8 +32,12 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; roles?: string[] }> 
   const { user, loading } = useAuth();
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-900">
-        <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-surface-50 dark:bg-dark-950 gap-3">
+        <div className="relative">
+          <div className="w-11 h-11 rounded-full border-[3px] border-primary-100 dark:border-primary-900" />
+          <div className="absolute inset-0 w-11 h-11 rounded-full border-[3px] border-primary-600 border-t-transparent animate-spin" />
+        </div>
+        <p className="text-xs font-medium text-surface-400 dark:text-dark-500">Loading…</p>
       </div>
     );
   }

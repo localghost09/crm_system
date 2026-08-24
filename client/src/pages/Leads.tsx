@@ -223,7 +223,7 @@ const Leads: React.FC = () => {
   };
 
   const inputCls = 'input-field';
-  const labelCls = 'block text-sm font-medium text-gray-700 dark:text-dark-300 mb-1.5';
+  const labelCls = 'label-field';
 
   return (
     <div className="page-container">
@@ -246,7 +246,7 @@ const Leads: React.FC = () => {
       <div className="card p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
@@ -284,7 +284,7 @@ const Leads: React.FC = () => {
             <div className="table-container">
               <table className="table">
                 <thead>
-                  <tr className="bg-gray-50 dark:bg-dark-900">
+                  <tr className="bg-surface-50 dark:bg-dark-900">
                     <th>Lead</th>
                     <th>Contact</th>
                     <th>Source</th>
@@ -300,38 +300,38 @@ const Leads: React.FC = () => {
                   {leadData?.data?.map((lead: Lead) => (
                     <tr key={lead._id}>
                       <td>
-                        <button onClick={() => setViewingLead(lead)} className="font-medium text-primary-600 dark:text-primary-400 hover:underline">
+                        <button onClick={() => setViewingLead(lead)} className="font-semibold text-primary-600 dark:text-primary-400 hover:underline">
                           {lead.name}
                         </button>
-                        <p className="text-xs text-gray-500 dark:text-dark-400">{lead.company || '—'}</p>
+                        <p className="text-xs text-surface-500 dark:text-dark-400">{lead.company || '—'}</p>
                       </td>
                       <td>
                         <p>{lead.email || '—'}</p>
-                        <p className="text-xs text-gray-500 dark:text-dark-400">{lead.phone || ''}</p>
+                        <p className="text-xs text-surface-500 dark:text-dark-400">{lead.phone || ''}</p>
                       </td>
                       <td><Badge color="info">{lead.source}</Badge></td>
                       <td><Badge color={getStatusColor(lead.status)}>{lead.status}</Badge></td>
                       <td><Badge color={getPriorityColor(lead.priority)}>{lead.priority}</Badge></td>
-                      <td>{lead.assignedTo?.name || <span className="text-gray-400">Unassigned</span>}</td>
+                      <td>{lead.assignedTo?.name || <span className="text-surface-400">Unassigned</span>}</td>
                       <td className="font-medium">{formatCurrency(lead.estimatedValue)}</td>
                       <td>{formatDate(lead.nextFollowUp)}</td>
                       <td>
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => setViewingLead(lead)}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20"
+                            className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors dark:hover:bg-primary-900/20"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => openEditModal(lead)}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20"
+                            className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors dark:hover:bg-primary-900/20"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => setDeleteLead(lead)}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            className="p-1.5 rounded-xl text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors dark:hover:bg-red-900/20"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -453,8 +453,8 @@ const Leads: React.FC = () => {
           <div className="space-y-5">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{viewingLead.name}</h3>
-                <p className="text-sm text-gray-500 dark:text-dark-400">{viewingLead.company} • {viewingLead.industry}</p>
+                <h3 className="text-xl font-bold text-surface-900 dark:text-white">{viewingLead.name}</h3>
+                <p className="text-sm text-surface-500 dark:text-dark-400">{viewingLead.company} • {viewingLead.industry}</p>
               </div>
               <div className="flex gap-2">
                 <Badge color={getStatusColor(viewingLead.status)}>{viewingLead.status}</Badge>
@@ -464,27 +464,27 @@ const Leads: React.FC = () => {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
               <div>
-                <p className="text-xs text-gray-500 dark:text-dark-400">Email</p>
+                <p className="text-xs text-surface-500 dark:text-dark-400">Email</p>
                 <p className="font-medium">{viewingLead.email || '—'}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 dark:text-dark-400">Phone</p>
+                <p className="text-xs text-surface-500 dark:text-dark-400">Phone</p>
                 <p className="font-medium">{viewingLead.phone || '—'}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 dark:text-dark-400">Source</p>
+                <p className="text-xs text-surface-500 dark:text-dark-400">Source</p>
                 <p className="font-medium">{viewingLead.source}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 dark:text-dark-400">Estimated Value</p>
+                <p className="text-xs text-surface-500 dark:text-dark-400">Estimated Value</p>
                 <p className="font-medium">{formatCurrency(viewingLead.estimatedValue)}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 dark:text-dark-400">Assigned To</p>
+                <p className="text-xs text-surface-500 dark:text-dark-400">Assigned To</p>
                 <p className="font-medium">{viewingLead.assignedTo?.name || 'Unassigned'}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 dark:text-dark-400">Created</p>
+                <p className="text-xs text-surface-500 dark:text-dark-400">Created</p>
                 <p className="font-medium">{formatDate(viewingLead.createdAt)}</p>
               </div>
             </div>
@@ -500,7 +500,7 @@ const Leads: React.FC = () => {
             )}
 
             <div>
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-dark-200 mb-2">Notes</h4>
+              <h4 className="text-sm font-semibold text-surface-700 dark:text-dark-200 mb-2">Notes</h4>
               <div className="flex gap-2 mb-2">
                 <input
                   value={noteText}
@@ -522,13 +522,13 @@ const Leads: React.FC = () => {
                 </button>
               </div>
               {viewingLead.notes?.length === 0 ? (
-                <p className="text-sm text-gray-400">No notes yet</p>
+                <p className="text-sm text-surface-400">No notes yet</p>
               ) : (
                 <div className="space-y-2 max-h-40 overflow-y-auto">
                   {viewingLead.notes.map((n, i) => (
-                    <div key={i} className="bg-gray-50 dark:bg-dark-700 p-3 rounded-lg text-sm">
+                    <div key={i} className="bg-surface-50 dark:bg-dark-700 p-3 rounded-lg text-sm">
                       <p>{n.text}</p>
-                      <p className="text-xs text-gray-400 mt-1">{formatDate(n.addedAt)}</p>
+                      <p className="text-xs text-surface-400 mt-1">{formatDate(n.addedAt)}</p>
                     </div>
                   ))}
                 </div>
@@ -537,7 +537,7 @@ const Leads: React.FC = () => {
 
             {/* Record interaction */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-dark-200 mb-2">Record Interaction</h4>
+              <h4 className="text-sm font-semibold text-surface-700 dark:text-dark-200 mb-2">Record Interaction</h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <select
                   value={interactionForm.type}
