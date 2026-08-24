@@ -15,6 +15,7 @@ import StatCard from '../components/common/StatCard';
 import Badge from '../components/common/Badge';
 import DonutBreakdown from '../components/common/DonutBreakdown';
 import { formatCurrency, formatDate, formatTime, timeAgo, getStatusColor, getPriorityColor, getErrorMessage } from '../utils/helpers';
+import { normalizeMonthlySeries } from '../utils/chartData';
 import type { DashboardSummary, ChartData, Task } from '../types';
 import { PageSkeleton } from '../components/common/Skeleton';
 
@@ -131,10 +132,9 @@ const Dashboard: React.FC = () => {
   const kpi = summary?.kpi;
   const upcoming = summary?.upcoming;
 
-  const revenueChartData = (revenueData || []).map((item: any) => ({
-    month: item._id,
-    revenue: item.revenue,
-  }));
+  // Aggregations only return months that contain records; normalize so the
+  // smooth spline always has >= 2 points to draw (zero-padded when sparse).
+  const revenueChartData = normalizeMonthlySeries(revenueData, 'revenue', 'revenue');
 
   const leadStatusData = (chartData?.leadStatus || []).map((item: any) => ({
     name: item._id,
@@ -146,10 +146,7 @@ const Dashboard: React.FC = () => {
     value: item.count,
   }));
 
-  const customerGrowthData = (chartData?.customerGrowth || []).map((item: any) => ({
-    month: item._id,
-    customers: item.count,
-  }));
+  const customerGrowthData = normalizeMonthlySeries(chartData?.customerGrowth, 'customers');
 
   return (
     <div className="page-container">
