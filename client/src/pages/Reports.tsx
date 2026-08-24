@@ -3,8 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Download, DollarSign, TrendingUp, Users, Target, Trophy, RotateCcw } from 'lucide-react';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar,
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import api from '../services/api';
 import { PageSkeleton } from '../components/common/Skeleton';
@@ -289,27 +288,20 @@ const Reports: React.FC = () => {
           </div>
           <div className="p-4 h-[348px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={monthlyRevenue}>
-                <defs>
-                  <linearGradient id="reportRevGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#7c3aed" stopOpacity={0.25} />
-                    <stop offset="100%" stopColor="#7c3aed" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
+              <LineChart data={monthlyRevenue}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
                 <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis tickFormatter={(v) => `$${Number(v) / 1000}k`} stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
                 <Tooltip formatter={(v) => formatCurrency(Number(v))} {...chartTooltipStyle} />
-                <Area
+                <Line
                   type="monotone"
                   dataKey="revenue"
                   stroke="#7c3aed"
                   strokeWidth={2.5}
-                  fill="url(#reportRevGrad)"
                   dot={{ r: 3.5, fill: '#7c3aed', strokeWidth: 2, stroke: '#fff' }}
                   activeDot={{ r: 5 }}
                 />
-              </AreaChart>
+              </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -337,19 +329,20 @@ const Reports: React.FC = () => {
           </div>
           <div className="p-4 h-[348px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={customerGrowthData} barCategoryGap="20%">
-                <defs>
-                  <linearGradient id="growthGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#06b6d4" stopOpacity={1} />
-                    <stop offset="100%" stopColor="#06b6d4" stopOpacity={0.55} />
-                  </linearGradient>
-                </defs>
+              <LineChart data={customerGrowthData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
                 <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
                 <Tooltip {...chartTooltipStyle} />
-                <Bar dataKey="customers" fill="url(#growthGrad)" radius={[6, 6, 0, 0]} />
-              </BarChart>
+                <Line
+                  type="monotone"
+                  dataKey="customers"
+                  stroke="#06b6d4"
+                  strokeWidth={2.5}
+                  dot={{ r: 3.5, fill: '#06b6d4', strokeWidth: 2, stroke: '#fff' }}
+                  activeDot={{ r: 5 }}
+                />
+              </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
