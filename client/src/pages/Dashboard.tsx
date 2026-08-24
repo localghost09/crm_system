@@ -52,6 +52,19 @@ const chartTooltipStyle = {
   },
 };
 
+// Spline chart dot: small dot on every point, ring highlight on the latest one
+const splineDot = (color: string, dataLength: number) => (props: any) => {
+  const { cx, cy, index } = props;
+  if (cx == null || cy == null) return <g />;
+  const isLast = index === dataLength - 1;
+  return (
+    <g>
+      {isLast && <circle cx={cx} cy={cy} r={11} fill={color} fillOpacity={0.15} />}
+      <circle cx={cx} cy={cy} r={isLast ? 5 : 3} fill={color} stroke="#fff" strokeWidth={2} />
+    </g>
+  );
+};
+
 const Dashboard: React.FC = () => {
   const queryClient = useQueryClient();
   const [range, setRange] = useState('30d');
@@ -133,6 +146,11 @@ const Dashboard: React.FC = () => {
     value: item.count,
   }));
 
+  const customerGrowthData = (chartData?.customerGrowth || []).map((item: any) => ({
+    month: item._id,
+    customers: item.count,
+  }));
+
   return (
     <div className="page-container">
       <div className="page-header">
@@ -165,9 +183,10 @@ const Dashboard: React.FC = () => {
         <StatCard label="Revenue" value={formatCurrency(kpi?.revenue || 0)} icon={DollarSign} color="green" subtext={`${kpi?.wonOpportunities || 0} deals won`} />
       </div>
 
-      {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="card lg:col-span-2 overflow-hidden">
+      {/* Trend Row — Revenue & Customer Growth side by side */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Revenue Trend */}
+        <div className="card overflow-hidden">
           <div className="card-header">
             <div>
               <h3 className="font-display font-bold text-surface-900 dark:text-white">Revenue Trend</h3>
@@ -179,31 +198,74 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="p-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueChartData}>
+              <AreaChart data={revenueChartData} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.25} />
+                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.35} />
+                    <stop offset="60%" stopColor="#8b5cf6" stopOpacity={0.08} />
                     <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
-                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dy={6} />
+                <YAxis tickFormatter={(v) => `$${Number(v) / 1000}k`} stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} width={44} />
                 <Tooltip formatter={(v) => formatCurrency(Number(v))} {...chartTooltipStyle} />
                 <Area
                   type="monotone"
                   dataKey="revenue"
                   stroke="#7c3aed"
-                  strokeWidth={2.5}
+                  strokeWidth={3}
                   fill="url(#revenueGrad)"
-                  dot={{ r: 3.5, fill: '#7c3aed', strokeWidth: 2, stroke: '#fff' }}
-                  activeDot={{ r: 5 }}
+                  dot={splineDot('#7c3aed', revenueChartData.length)}
+                  activeDot={{ r: 6, fill: '#7c3aed', stroke: '#fff', strokeWidth: 2 }}
                 />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
+        {/* Customer Growth */}
+        <div className="card overflow-hidden">
+          <div className="card-header">
+            <div>
+              <h3 className="font-display font-bold text-surface-900 dark:text-white">Customer Growth</h3>
+              <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">New customers per month</p>
+            </div>
+            <div className="icon-well bg-cyan-50 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-400">
+              <Users className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="p-4 h-72">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={customerGrowthData} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="customerGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.35} />
+                    <stop offset="60%" stopColor="#06b6d4" stopOpacity={0.08} />
+                    <stop offset="100%" stopColor="#06b6d4" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
+                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dy={6} />
+                <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} width={36} />
+                <Tooltip {...chartTooltipStyle} />
+                <Area
+                  type="monotone"
+                  dataKey="customers"
+                  stroke="#06b6d4"
+                  strokeWidth={3}
+                  fill="url(#customerGrad)"
+                  dot={splineDot('#06b6d4', customerGrowthData.length)}
+                  activeDot={{ r: 6, fill: '#06b6d4', stroke: '#fff', strokeWidth: 2 }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* Donut Row — Lead Status & Lead Sources */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Lead Status — donut breakdown */}
         <div className="card overflow-hidden">
           <div className="card-header">
@@ -216,10 +278,7 @@ const Dashboard: React.FC = () => {
             <DonutBreakdown data={leadStatusData} colorForName={(n) => STATUS_COLORS[n] || PIPELINE_COLORS[0]} centerLabel="Leads" />
           </div>
         </div>
-      </div>
 
-      {/* Bottom Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Lead Sources — donut breakdown */}
         <div className="card overflow-hidden">
           <div className="card-header">
@@ -232,17 +291,19 @@ const Dashboard: React.FC = () => {
             <DonutBreakdown data={leadSourceData} centerLabel="Leads" />
           </div>
         </div>
+      </div>
 
-        <div className="space-y-4">
-          {/* Upcoming follow-ups */}
-          <div className="card overflow-hidden">
-            <div className="card-header">
-              <div className="flex items-center gap-2.5">
-                <div className="icon-well !w-8 !h-8 bg-primary-50 text-primary-600 dark:bg-primary-500/15 dark:text-primary-400">
-                  <Clock className="w-3.5 h-3.5" />
-                </div>
-                <h3 className="font-display font-bold text-surface-900 dark:text-white text-sm">Upcoming Follow-ups</h3>
+      {/* Follow-ups & Overdue Tasks Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Upcoming follow-ups */}
+        <div className="card overflow-hidden">
+          <div className="card-header">
+            <div className="flex items-center gap-2.5">
+              <div className="icon-well !w-8 !h-8 bg-primary-50 text-primary-600 dark:bg-primary-500/15 dark:text-primary-400">
+                <Clock className="w-3.5 h-3.5" />
               </div>
+              <h3 className="font-display font-bold text-surface-900 dark:text-white text-sm">Upcoming Follow-ups</h3>
+            </div>
               <Link to="/followups" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
                 View all <ArrowRight className="w-3 h-3" />
               </Link>
@@ -293,7 +354,6 @@ const Dashboard: React.FC = () => {
               ))}
             </div>
           </div>
-        </div>
       </div>
 
       {/* Today + Activity Row */}
