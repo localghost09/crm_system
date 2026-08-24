@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Download, DollarSign, TrendingUp, Users, Target, Trophy, RotateCcw } from 'lucide-react';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import api from '../services/api';
 import { PageSkeleton } from '../components/common/Skeleton';
@@ -28,6 +28,19 @@ const rankStyles = (i: number) => {
   if (i === 1) return 'bg-slate-200 text-slate-700 dark:bg-dark-600 dark:text-dark-200';
   if (i === 2) return 'bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400';
   return 'bg-surface-100 text-surface-500 dark:bg-dark-700 dark:text-dark-400';
+};
+
+// Spline chart dot: small dot on every point, ring highlight on the latest one
+const splineDot = (color: string, dataLength: number) => (props: any) => {
+  const { cx, cy, index } = props;
+  if (cx == null || cy == null) return <g />;
+  const isLast = index === dataLength - 1;
+  return (
+    <g>
+      {isLast && <circle cx={cx} cy={cy} r={11} fill={color} fillOpacity={0.15} />}
+      <circle cx={cx} cy={cy} r={isLast ? 5 : 3} fill={color} stroke="#fff" strokeWidth={2} />
+    </g>
+  );
 };
 
 const Reports: React.FC = () => {
@@ -288,20 +301,28 @@ const Reports: React.FC = () => {
           </div>
           <div className="p-4 h-[348px]">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={monthlyRevenue}>
+              <AreaChart data={monthlyRevenue} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="reportRevenueGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#7c3aed" stopOpacity={0.35} />
+                    <stop offset="60%" stopColor="#7c3aed" stopOpacity={0.08} />
+                    <stop offset="100%" stopColor="#7c3aed" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
-                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis tickFormatter={(v) => `$${Number(v) / 1000}k`} stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dy={6} />
+                <YAxis tickFormatter={(v) => `$${Number(v) / 1000}k`} stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} width={44} />
                 <Tooltip formatter={(v) => formatCurrency(Number(v))} {...chartTooltipStyle} />
-                <Line
+                <Area
                   type="monotone"
                   dataKey="revenue"
                   stroke="#7c3aed"
-                  strokeWidth={2.5}
-                  dot={{ r: 3.5, fill: '#7c3aed', strokeWidth: 2, stroke: '#fff' }}
-                  activeDot={{ r: 5 }}
+                  strokeWidth={3}
+                  fill="url(#reportRevenueGrad)"
+                  dot={splineDot('#7c3aed', monthlyRevenue.length)}
+                  activeDot={{ r: 6, fill: '#7c3aed', stroke: '#fff', strokeWidth: 2 }}
                 />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -329,20 +350,28 @@ const Reports: React.FC = () => {
           </div>
           <div className="p-4 h-[348px]">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={customerGrowthData}>
+              <AreaChart data={customerGrowthData} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="customerGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.35} />
+                    <stop offset="60%" stopColor="#06b6d4" stopOpacity={0.08} />
+                    <stop offset="100%" stopColor="#06b6d4" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
-                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
+                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dy={6} />
+                <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} width={36} />
                 <Tooltip {...chartTooltipStyle} />
-                <Line
+                <Area
                   type="monotone"
                   dataKey="customers"
                   stroke="#06b6d4"
-                  strokeWidth={2.5}
-                  dot={{ r: 3.5, fill: '#06b6d4', strokeWidth: 2, stroke: '#fff' }}
-                  activeDot={{ r: 5 }}
+                  strokeWidth={3}
+                  fill="url(#customerGrad)"
+                  dot={splineDot('#06b6d4', customerGrowthData.length)}
+                  activeDot={{ r: 6, fill: '#06b6d4', stroke: '#fff', strokeWidth: 2 }}
                 />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
