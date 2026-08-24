@@ -126,7 +126,7 @@ const FollowUps: React.FC = () => {
   };
 
   const inputCls = 'input-field';
-  const labelCls = 'block text-sm font-medium text-gray-700 dark:text-dark-300 mb-1.5';
+  const labelCls = 'label-field';
 
   return (
     <div className="page-container">
@@ -143,7 +143,7 @@ const FollowUps: React.FC = () => {
       <div className="card p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search follow-ups..." className="input-field pl-10" />
           </div>
           <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} className="input-field sm:w-44">
@@ -167,7 +167,7 @@ const FollowUps: React.FC = () => {
             <div className="table-container">
               <table className="table">
                 <thead>
-                  <tr className="bg-gray-50 dark:bg-dark-900">
+                  <tr className="bg-surface-50 dark:bg-dark-900">
                     <th>Follow-up</th>
                     <th>Contact</th>
                     <th>Assignee</th>
@@ -180,13 +180,13 @@ const FollowUps: React.FC = () => {
                   {followupsData?.data?.map((fu: FollowUp) => (
                     <tr key={fu._id} className={fu.status === 'Overdue' ? 'bg-red-50/50 dark:bg-red-900/10' : ''}>
                       <td>
-                        <p className="font-medium text-gray-900 dark:text-white">{fu.title}</p>
-                        <p className="text-xs text-gray-500 dark:text-dark-400">
+                        <p className="font-medium text-surface-900 dark:text-white">{fu.title}</p>
+                        <p className="text-xs text-surface-500 dark:text-dark-400">
                           {fu.type || 'Follow-up'}{fu.description ? ' • ' + fu.description.substring(0, 50) : ''}
                         </p>
                       </td>
                       <td>{fu.customer?.name || fu.lead?.name || fu.opportunity?.title || '—'}</td>
-                      <td>{fu.assignedTo?.name || <span className="text-gray-400">Unassigned</span>}</td>
+                      <td>{fu.assignedTo?.name || <span className="text-surface-400">Unassigned</span>}</td>
                       <td>{formatDateTime(fu.followUpDate)}</td>
                       <td><Badge color={getStatusColor(fu.status)}>{fu.status}</Badge></td>
                       <td>
@@ -195,21 +195,21 @@ const FollowUps: React.FC = () => {
                             <>
                               <button
                                 onClick={() => updateMutation.mutate({ id: fu._id, data: { status: 'Completed' } })}
-                                className="p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50"
+                                className="p-1.5 rounded-xl text-surface-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
                                 title="Mark completed"
                               >
                                 <CheckCircle2 className="w-4 h-4" />
                               </button>
                               <button
                                 onClick={() => updateMutation.mutate({ id: fu._id, data: { status: 'Cancelled' } })}
-                                className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50"
+                                className="p-1.5 rounded-xl text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                                 title="Cancel"
                               >
                                 <XCircle className="w-4 h-4" />
                               </button>
                             </>
                           )}
-                          <button onClick={() => openEdit(fu)} className="p-1.5 rounded-lg text-gray-400 hover:text-primary-600 hover:bg-primary-50">
+                          <button onClick={() => openEdit(fu)} className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
                             <span className="text-xs font-medium">Edit</span>
                           </button>
                         </div>

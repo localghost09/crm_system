@@ -118,7 +118,7 @@ const Team: React.FC = () => {
   };
 
   const inputCls = 'input-field';
-  const labelCls = 'block text-sm font-medium text-gray-700 dark:text-dark-300 mb-1.5';
+  const labelCls = 'label-field';
 
   const users: User[] = teamData?.data || [];
 
@@ -139,7 +139,7 @@ const Team: React.FC = () => {
       <div className="card p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search team members..." className="input-field pl-10" />
           </div>
           <select value={role} onChange={(e) => setRole(e.target.value)} className="input-field sm:w-44">
@@ -153,47 +153,48 @@ const Team: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {users.map((user) => (
-          <div key={user._id} className="card p-5">
+          <div key={user._id} className="card p-5 hover:shadow-card-hover transition-all duration-300 group">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/40 rounded-full flex items-center justify-center">
-                  <span className="text-lg font-bold text-primary-700 dark:text-primary-300">{getInitials(user.name)}</span>
+                <div className="w-12 h-12 bg-brand-gradient rounded-2xl flex items-center justify-center shadow-sm shadow-primary-600/20">
+                  <span className="text-base font-bold text-white">{getInitials(user.name)}</span>
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">{user.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-dark-400">{user.email}</p>
+                <div className="min-w-0">
+                  <p className="font-display font-bold text-surface-900 dark:text-white truncate">{user.name}</p>
+                  <p className="text-xs text-surface-500 dark:text-dark-400 truncate">{user.email}</p>
                 </div>
               </div>
               <Badge color={roleColor[user.role]}>{user.role}</Badge>
             </div>
 
             <div className="mt-4 space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-gray-600 dark:text-dark-300">
-                <Briefcase className="w-4 h-4 text-gray-400" />
-                {user.title || 'No title'} {user.department ? `• ${user.department}` : ''}
+              <div className="flex items-center gap-2 text-surface-600 dark:text-dark-300">
+                <Briefcase className="w-4 h-4 text-surface-400" />
+                <span className="truncate">{user.title || 'No title'}{user.department ? ` · ${user.department}` : ''}</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-600 dark:text-dark-300">
-                <Shield className="w-4 h-4 text-gray-400" />
-                Status: <span className={user.isActive ? 'text-green-600' : 'text-red-600'}>
+              <div className="flex items-center gap-2 text-surface-600 dark:text-dark-300">
+                <Shield className="w-4 h-4 text-surface-400" />
+                Status:{' '}
+                <span className={user.isActive ? 'text-emerald-600 dark:text-emerald-400 font-medium' : 'text-red-600 dark:text-red-400 font-medium'}>
                   {user.isActive ? 'Active' : 'Inactive'}
                 </span>
               </div>
             </div>
 
-            <div className="mt-4 flex items-center justify-between border-t border-gray-100 dark:border-dark-700 pt-3">
-              <span className={`text-xs font-medium px-3 py-1.5 rounded-lg ${
+            <div className="mt-4 flex items-center justify-between border-t border-surface-100 dark:border-dark-800 pt-3.5">
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded-lg ring-1 ring-inset ${
                 user.isActive
-                  ? 'text-green-600 bg-green-50 dark:bg-green-900/20'
-                  : 'text-red-600 bg-red-50 dark:bg-red-900/20'
+                  ? 'text-emerald-700 bg-emerald-50 ring-emerald-600/10 dark:text-emerald-400 dark:bg-emerald-500/10 dark:ring-emerald-500/20'
+                  : 'text-red-700 bg-red-50 ring-red-600/10 dark:text-red-400 dark:bg-red-500/10 dark:ring-red-500/20'
               }`}>
                 {user.isActive ? 'Active' : 'Inactive'}
               </span>
               {isAdmin && (
-                <div className="flex gap-1">
-                  <button onClick={() => openEdit(user)} className="p-1.5 rounded-lg text-gray-400 hover:text-primary-600 hover:bg-primary-50">
+                <div className="flex gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                  <button onClick={() => openEdit(user)} className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
                     <Pencil className="w-4 h-4" />
                   </button>
-                  <button onClick={() => setDeleting(user)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50">
+                  <button onClick={() => setDeleting(user)} className="p-1.5 rounded-xl text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>

@@ -12,14 +12,14 @@ import type { Opportunity, User, Customer, Lead } from '../types';
 
 const STAGES = ['New Lead', 'Contacted', 'Qualified', 'Proposal Sent', 'Negotiation', 'Won', 'Lost'];
 
-const STAGE_STYLES: Record<string, { header: string; badge: string }> = {
-  'New Lead': { header: 'bg-gray-100 dark:bg-dark-700 text-gray-700 dark:text-dark-300', badge: 'gray' },
-  'Contacted': { header: 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300', badge: 'info' },
-  'Qualified': { header: 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300', badge: 'primary' },
-  'Proposal Sent': { header: 'bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300', badge: 'primary' },
-  'Negotiation': { header: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300', badge: 'warning' },
-  'Won': { header: 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300', badge: 'success' },
-  'Lost': { header: 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300', badge: 'danger' },
+const STAGE_STYLES: Record<string, { header: string; dot: string; badge: string }> = {
+  'New Lead': { header: 'text-surface-700 dark:text-dark-200', dot: 'bg-surface-400', badge: 'gray' },
+  'Contacted': { header: 'text-sky-700 dark:text-sky-300', dot: 'bg-sky-500', badge: 'info' },
+  'Qualified': { header: 'text-indigo-700 dark:text-indigo-300', dot: 'bg-indigo-500', badge: 'primary' },
+  'Proposal Sent': { header: 'text-violet-700 dark:text-violet-300', dot: 'bg-violet-500', badge: 'primary' },
+  'Negotiation': { header: 'text-amber-700 dark:text-amber-300', dot: 'bg-amber-500', badge: 'warning' },
+  'Won': { header: 'text-emerald-700 dark:text-emerald-300', dot: 'bg-emerald-500', badge: 'success' },
+  'Lost': { header: 'text-red-700 dark:text-red-300', dot: 'bg-red-500', badge: 'danger' },
 };
 
 interface OppForm {
@@ -149,7 +149,7 @@ const Pipeline: React.FC = () => {
   };
 
   const inputCls = 'input-field';
-  const labelCls = 'block text-sm font-medium text-gray-700 dark:text-dark-300 mb-1.5';
+  const labelCls = 'label-field';
 
   if (isLoading) return <PageSkeleton />;
 
@@ -172,7 +172,7 @@ const Pipeline: React.FC = () => {
         </div>
         <div className="flex items-center gap-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search deals..." className="input-field pl-10 w-64" />
           </div>
           <button onClick={openCreate} className="btn-primary">
@@ -184,49 +184,54 @@ const Pipeline: React.FC = () => {
       {/* Pipeline stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card p-4">
-          <p className="text-xs text-gray-500 dark:text-dark-400">Pipeline Value</p>
-          <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
+          <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Pipeline Value</p>
+          <p className="text-lg font-display font-bold text-surface-900 dark:text-white mt-1">
             {formatCurrency(Object.values(stageTotals).reduce((a, b) => a + b, 0))}
           </p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-gray-500 dark:text-dark-400">Open Deals</p>
-          <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
+          <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Open Deals</p>
+          <p className="text-lg font-display font-bold text-surface-900 dark:text-white mt-1">
             {opportunities.filter(o => o.stage !== 'Won' && o.stage !== 'Lost').length}
           </p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-gray-500 dark:text-dark-400">Won</p>
-          <p className="text-lg font-bold text-green-600 dark:text-green-400 mt-1">{stageCounts['Won'] || 0}</p>
+          <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Won</p>
+          <p className="text-lg font-display font-bold text-emerald-600 dark:text-emerald-400 mt-1">{stageCounts['Won'] || 0}</p>
         </div>
         <div className="card p-4">
-          <p className="text-xs text-gray-500 dark:text-dark-400">Lost</p>
-          <p className="text-lg font-bold text-red-600 dark:text-red-400 mt-1">{stageCounts['Lost'] || 0}</p>
+          <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Lost</p>
+          <p className="text-lg font-display font-bold text-red-600 dark:text-red-400 mt-1">{stageCounts['Lost'] || 0}</p>
         </div>
       </div>
 
       {/* Kanban board */}
-      <div className="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6">
+      <div className="flex gap-3 overflow-x-auto pb-4 -mx-5 sm:-mx-6 lg:-mx-8 px-5 sm:px-6 lg:px-8">
         {STAGES.map((stage) => {
           const stageOpps = opportunities.filter((o) => o.stage === stage);
           const style = STAGE_STYLES[stage];
           return (
             <div
               key={stage}
-              className={`flex-shrink-0 w-72 rounded-xl transition-colors ${
-                dragOver === stage ? 'bg-primary-50 dark:bg-primary-900/20 ring-2 ring-primary-400' : 'bg-gray-100/70 dark:bg-dark-800'
+              className={`flex-shrink-0 w-[280px] rounded-2xl transition-all duration-200 border ${
+                dragOver === stage
+                  ? 'bg-primary-50/80 dark:bg-primary-900/20 border-primary-300 dark:border-primary-600 ring-2 ring-primary-400/40 shadow-glow'
+                  : 'bg-surface-100/60 dark:bg-dark-900/60 border-surface-200/60 dark:border-dark-800'
               }`}
               onDragOver={(e) => { e.preventDefault(); setDragOver(stage); }}
               onDragLeave={() => setDragOver(null)}
               onDrop={() => handleDrop(stage)}
             >
-              <div className={`p-3 rounded-t-xl flex items-center justify-between ${style.header}`}>
-                <span className="text-sm font-semibold">{stage}</span>
-                <span className="text-xs font-bold bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded-full">
+              <div className={`px-3.5 py-3 flex items-center justify-between ${style.header}`}>
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${style.dot}`} />
+                  <span className="text-sm font-semibold">{stage}</span>
+                </div>
+                <span className="text-[11px] font-bold bg-white dark:bg-dark-800 text-surface-600 dark:text-dark-300 px-2 py-0.5 rounded-lg shadow-soft">
                   {stageOpps.length}
                 </span>
               </div>
-              <div className="p-2 space-y-2 min-h-[100px]">
+              <div className="p-2 space-y-2 min-h-[120px]">
                 {stageOpps.map((opp) => (
                   <div
                     key={opp._id}
@@ -234,20 +239,20 @@ const Pipeline: React.FC = () => {
                     onDragStart={() => setDragging(opp)}
                     onDragEnd={() => setDragging(null)}
                     onClick={() => setExpanded(expanded?._id === opp._id ? null : opp)}
-                    className="bg-white dark:bg-dark-700 rounded-lg shadow-sm border border-gray-200 dark:border-dark-600 p-3 cursor-grab active:cursor-grabbing hover:shadow-md transition-all"
+                    className="bg-white dark:bg-dark-800 rounded-xl shadow-soft border border-surface-200/80 dark:border-dark-700 p-3.5 cursor-grab active:cursor-grabbing hover:shadow-card-hover hover:border-surface-300 dark:hover:border-dark-600 transition-all duration-200"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">{opp.title}</p>
-                      <GripVertical className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                      <p className="text-sm font-semibold text-surface-900 dark:text-white line-clamp-2 leading-snug">{opp.title}</p>
+                      <GripVertical className="w-4 h-4 text-surface-300 dark:text-dark-600 flex-shrink-0" />
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-dark-400 mt-1 truncate">
+                    <p className="text-xs text-surface-500 dark:text-dark-400 mt-1.5 truncate">
                       {opp.customer?.name || opp.lead?.name || 'No customer'}
                     </p>
-                    <div className="flex items-center justify-between mt-2">
-                      <span className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(opp.expectedValue)}</span>
-                      <span className="text-xs font-medium text-gray-500 dark:text-dark-400">{opp.probability}%</span>
+                    <div className="flex items-center justify-between mt-3">
+                      <span className="text-sm font-bold font-display text-surface-900 dark:text-white">{formatCurrency(opp.expectedValue)}</span>
+                      <span className="text-[11px] font-semibold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-500/10 px-1.5 py-0.5 rounded-md">{opp.probability}%</span>
                     </div>
-                    <div className="flex items-center justify-between mt-2 text-xs text-gray-400 dark:text-dark-500">
+                    <div className="flex items-center justify-between mt-2.5 text-[11px] text-surface-400 dark:text-dark-500">
                       <span className="flex items-center gap-1">
                         <UserIcon className="w-3 h-3" /> {opp.assignedTo?.name?.split(' ')[0] || 'Unassigned'}
                       </span>
@@ -257,17 +262,17 @@ const Pipeline: React.FC = () => {
                     </div>
 
                     {expanded?._id === opp._id && (
-                      <div className="mt-3 pt-3 border-t border-gray-100 dark:border-dark-600 space-y-2 animate-fade-in">
-                        <div className="flex gap-2">
+                      <div className="mt-3 pt-3 border-t border-surface-100 dark:border-dark-700 space-y-2 animate-fade-in">
+                        <div className="flex gap-2 items-center">
                           <Badge color={stage === 'Won' ? 'success' : stage === 'Lost' ? 'danger' : 'info'}>{opp.stage}</Badge>
-                          <span className="text-xs text-gray-500 dark:text-dark-400">Created {formatDate(opp.createdAt)}</span>
+                          <span className="text-[11px] text-surface-500 dark:text-dark-400">Created {formatDate(opp.createdAt)}</span>
                         </div>
                         {opp.lostReason && (
                           <p className="text-xs text-red-600 dark:text-red-400">Lost reason: {opp.lostReason}</p>
                         )}
                         <button
                           onClick={(e) => { e.stopPropagation(); openEdit(opp); }}
-                          className="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
+                          className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline"
                         >
                           Edit deal
                         </button>
@@ -276,10 +281,12 @@ const Pipeline: React.FC = () => {
                   </div>
                 ))}
                 {stageOpps.length === 0 && (
-                  <p className="text-xs text-gray-400 dark:text-dark-500 text-center py-6">Drop deals here</p>
+                  <div className="border-2 border-dashed border-surface-200 dark:border-dark-700 rounded-xl py-8 text-center">
+                    <p className="text-xs text-surface-400 dark:text-dark-500">Drop deals here</p>
+                  </div>
                 )}
               </div>
-              <div className="p-2 text-xs text-gray-400 dark:text-dark-500 border-t border-gray-200 dark:border-dark-700">
+              <div className="px-3.5 py-2.5 text-[11px] font-medium text-surface-400 dark:text-dark-500 border-t border-surface-200/60 dark:border-dark-800">
                 {stage !== 'Won' && stage !== 'Lost' ? `${formatCurrency(stageTotals[stage] || 0)} total` : `${stageOpps.length} deals`}
               </div>
             </div>

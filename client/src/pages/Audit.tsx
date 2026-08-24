@@ -41,8 +41,8 @@ const Audit: React.FC = () => {
           <h1 className="page-title">Audit Logs</h1>
           <p className="page-subtitle">Track all important actions in the system</p>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-dark-400 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-lg px-3 py-2">
-          <Shield className="w-4 h-4" />
+        <div className="flex items-center gap-2 text-sm font-medium text-surface-600 dark:text-dark-300 bg-white dark:bg-dark-900 border border-surface-200 dark:border-dark-700 rounded-xl px-3.5 py-2 shadow-soft">
+          <Shield className="w-4 h-4 text-primary-500" />
           <span>{data?.pagination?.total || 0} events logged</span>
         </div>
       </div>
@@ -50,7 +50,7 @@ const Audit: React.FC = () => {
       <div className="card p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Search by action..." className="input-field pl-10" />
           </div>
           <select value={entity} onChange={(e) => { setEntity(e.target.value); setPage(1); }} className="input-field sm:w-44">
@@ -72,7 +72,7 @@ const Audit: React.FC = () => {
             <div className="table-container">
               <table className="table">
                 <thead>
-                  <tr className="bg-gray-50 dark:bg-dark-900">
+                  <tr className="bg-surface-50 dark:bg-dark-900">
                     <th>Timestamp</th>
                     <th>User</th>
                     <th>Action</th>
@@ -87,18 +87,18 @@ const Audit: React.FC = () => {
                       <td className="text-xs">{formatDateTime(log.createdAt)}</td>
                       <td>
                         <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 bg-gray-100 dark:bg-dark-700 rounded-full flex items-center justify-center">
-                            <span className="text-xs font-bold text-gray-600 dark:text-dark-300">
+                          <div className="w-7 h-7 bg-brand-gradient rounded-lg flex items-center justify-center">
+                            <span className="text-[10px] font-bold text-white">
                               {log.user?.name?.charAt(0)?.toUpperCase() || '?'}
                             </span>
                           </div>
-                          <span className="text-sm">{log.user?.name || 'System'}</span>
+                          <span className="text-sm font-medium">{log.user?.name || 'System'}</span>
                         </div>
                       </td>
                       <td><Badge color={getActionColor(log.action)}>{log.action}</Badge></td>
-                      <td><span className="text-xs font-medium text-gray-500">{log.entity}</span></td>
+                      <td><span className="text-xs font-medium text-surface-500">{log.entity}</span></td>
                       <td className="text-xs max-w-md truncate">{log.description}</td>
-                      <td className="text-xs text-gray-400">{log.ipAddress || '—'}</td>
+                      <td className="text-xs text-surface-400">{log.ipAddress || '—'}</td>
                     </tr>
                   ))}
                 </tbody>

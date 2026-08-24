@@ -62,33 +62,33 @@ const Notifications: React.FC = () => {
         </button>
       </div>
 
-      <div className="card">
+      <div className="card overflow-hidden">
         {notifications.length === 0 ? (
           <EmptyState title="No notifications" description="You're all caught up!" />
         ) : (
-          <div className="divide-y divide-gray-100 dark:divide-dark-700">
+          <div className="divide-y divide-surface-50 dark:divide-dark-800">
             {notifications.map((n) => {
-              const meta = typeMeta[n.type] || { icon: MessageSquare, color: 'bg-gray-100 text-gray-600' };
+              const meta = typeMeta[n.type] || { icon: MessageSquare, color: 'bg-surface-100 text-surface-600 dark:bg-dark-700 dark:text-dark-300' };
               const Icon = meta.icon;
               return (
                 <button
                   key={n._id}
                   onClick={() => !n.isRead && markRead.mutate(n._id)}
-                  className={`w-full flex items-start gap-4 px-5 py-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-dark-700 ${
-                    !n.isRead ? 'bg-primary-50/50 dark:bg-primary-900/10' : ''
+                  className={`w-full flex items-start gap-4 px-5 py-4 text-left transition-all duration-200 hover:bg-surface-50 dark:hover:bg-dark-800/50 ${
+                    !n.isRead ? 'bg-primary-50/40 dark:bg-primary-500/5' : ''
                   }`}
                 >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${meta.color}`}>
-                    <Icon className="w-5 h-5" />
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${meta.color}`}>
+                    <Icon className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{n.title}</p>
-                      <span className="text-xs text-gray-400 flex-shrink-0">{timeAgo(n.createdAt)}</span>
+                      <p className="text-sm font-semibold text-surface-900 dark:text-white">{n.title}</p>
+                      <span className="text-[11px] font-medium text-surface-400 dark:text-dark-500 flex-shrink-0">{timeAgo(n.createdAt)}</span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-dark-300 mt-0.5">{n.message}</p>
+                    <p className="text-sm text-surface-600 dark:text-dark-300 mt-0.5 leading-relaxed">{n.message}</p>
                   </div>
-                  {!n.isRead && <span className="w-2.5 h-2.5 bg-primary-500 rounded-full mt-2 flex-shrink-0" />}
+                  {!n.isRead && <span className="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0 ring-2 ring-primary-200 dark:ring-primary-800" />}
                 </button>
               );
             })}

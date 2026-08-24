@@ -7,17 +7,17 @@ interface BadgeProps {
 }
 
 const colorMap = {
-  success: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
-  warning: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300',
-  danger: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  info: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  gray: 'bg-gray-100 text-gray-700 dark:bg-gray-700/40 dark:text-gray-300',
-  primary: 'bg-primary-100 text-primary-800 dark:bg-primary-900/40 dark:text-primary-300',
+  success: 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/10 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20',
+  warning: 'bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-600/10 dark:bg-amber-500/10 dark:text-amber-400 dark:ring-amber-500/20',
+  danger: 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/10 dark:bg-red-500/10 dark:text-red-400 dark:ring-red-500/20',
+  info: 'bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-600/10 dark:bg-sky-500/10 dark:text-sky-400 dark:ring-sky-500/20',
+  gray: 'bg-surface-100 text-surface-600 ring-1 ring-inset ring-surface-500/10 dark:bg-dark-700 dark:text-dark-300 dark:ring-dark-500/20',
+  primary: 'bg-primary-50 text-primary-700 ring-1 ring-inset ring-primary-600/10 dark:bg-primary-500/10 dark:text-primary-400 dark:ring-primary-500/20',
 };
 
 const Badge: React.FC<BadgeProps> = ({ children, color = 'gray', className = '' }) => {
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colorMap[color]} ${className}`}>
+    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-semibold tracking-wide ${colorMap[color]} ${className}`}>
       {children}
     </span>
   );

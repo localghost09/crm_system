@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import {
-  Users, UserPlus, TrendingUp, CheckSquare, Target, DollarSign,
+  Users, UserPlus, Target, DollarSign,
   BarChart3, ArrowRight, Clock, AlertTriangle
 } from 'lucide-react';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, BarChart, Bar, Legend
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, BarChart, Bar
 } from 'recharts';
 import api from '../services/api';
 import StatCard from '../components/common/StatCard';
@@ -16,7 +16,18 @@ import { formatCurrency, formatDate, formatTime, timeAgo, getStatusColor, getPri
 import type { DashboardSummary, ChartData } from '../types';
 import { PageSkeleton } from '../components/common/Skeleton';
 
-const PIPELINE_COLORS = ['#3b82f6', '#6366f1', '#8b5cf6', '#06b6d4', '#f59e0b', '#10b981', '#ef4444'];
+const PIPELINE_COLORS = ['#8b5cf6', '#06b6d4', '#6366f1', '#10b981', '#f59e0b', '#ec4899', '#ef4444'];
+
+const chartTooltipStyle = {
+  contentStyle: {
+    background: 'rgba(255,255,255,0.95)',
+    border: '1px solid #e4e4e7',
+    borderRadius: '12px',
+    boxShadow: '0 10px 40px -10px rgba(0,0,0,0.12)',
+    fontSize: '12px',
+    padding: '10px 14px',
+  },
+};
 
 const Dashboard: React.FC = () => {
   const [range, setRange] = useState('30d');
@@ -70,15 +81,17 @@ const Dashboard: React.FC = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">Dashboard</h1>
-          <p className="page-subtitle">Welcome back! Here's your sales overview.</p>
+          <p className="page-subtitle">Welcome back! Here&apos;s your sales overview.</p>
         </div>
-        <div className="flex items-center gap-2 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-white dark:bg-dark-900 border border-surface-200 dark:border-dark-700 rounded-xl p-1 shadow-soft">
           {['7d', '30d', '90d'].map((r) => (
             <button
               key={r}
               onClick={() => setRange(r)}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                range === r ? 'bg-primary-600 text-white' : 'text-gray-500 hover:text-gray-700 dark:text-dark-400'
+              className={`px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                range === r
+                  ? 'bg-primary-600 text-white shadow-sm shadow-primary-600/30'
+                  : 'text-surface-500 hover:text-surface-700 dark:text-dark-400 dark:hover:text-dark-200'
               }`}
             >
               {r.toUpperCase()}
@@ -97,85 +110,129 @@ const Dashboard: React.FC = () => {
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="card lg:col-span-2">
-          <div className="card-header flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Revenue Trend</h3>
-            <BarChart3 className="w-4 h-4 text-gray-400" />
+        <div className="card lg:col-span-2 overflow-hidden">
+          <div className="card-header">
+            <div>
+              <h3 className="font-display font-bold text-surface-900 dark:text-white">Revenue Trend</h3>
+              <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">Won deal revenue over time</p>
+            </div>
+            <div className="icon-well bg-primary-50 text-primary-600 dark:bg-primary-500/15 dark:text-primary-400">
+              <BarChart3 className="w-4 h-4" />
+            </div>
           </div>
-          <div className="p-4 h-64">
+          <div className="p-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={revenueChartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} />
-                <YAxis stroke="#94a3b8" fontSize={12} />
-                <Tooltip formatter={(v) => formatCurrency(Number(v))} />
-                <Line type="monotone" dataKey="revenue" stroke="#2563eb" strokeWidth={2.5} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-              </LineChart>
+              <AreaChart data={revenueChartData}>
+                <defs>
+                  <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.25} />
+                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
+                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip formatter={(v) => formatCurrency(Number(v))} {...chartTooltipStyle} />
+                <Area
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#7c3aed"
+                  strokeWidth={2.5}
+                  fill="url(#revenueGrad)"
+                  dot={{ r: 3.5, fill: '#7c3aed', strokeWidth: 2, stroke: '#fff' }}
+                  activeDot={{ r: 5 }}
+                />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card overflow-hidden">
           <div className="card-header">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Lead Status</h3>
+            <div>
+              <h3 className="font-display font-bold text-surface-900 dark:text-white">Lead Status</h3>
+              <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">Distribution by stage</p>
+            </div>
           </div>
-          <div className="p-4 h-64">
+          <div className="p-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={pipelineChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                <Pie
+                  data={pipelineChartData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={55}
+                  outerRadius={85}
+                  paddingAngle={3}
+                  strokeWidth={0}
+                >
                   {pipelineChartData.map((_: any, index: number) => (
                     <Cell key={index} fill={PIPELINE_COLORS[index % PIPELINE_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
-                <Legend />
+                <Tooltip {...chartTooltipStyle} />
               </PieChart>
             </ResponsiveContainer>
+          </div>
+          <div className="px-4 pb-4 flex flex-wrap gap-2 justify-center -mt-2">
+            {pipelineChartData.slice(0, 5).map((item: any, i: number) => (
+              <div key={item.name} className="flex items-center gap-1.5 text-xs text-surface-500 dark:text-dark-400">
+                <span className="w-2 h-2 rounded-full" style={{ background: PIPELINE_COLORS[i % PIPELINE_COLORS.length] }} />
+                {item.name}
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="card">
-          <div className="card-header flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Lead Sources</h3>
+        <div className="card overflow-hidden">
+          <div className="card-header">
+            <div>
+              <h3 className="font-display font-bold text-surface-900 dark:text-white">Lead Sources</h3>
+              <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">Where your leads come from</p>
+            </div>
           </div>
           <div className="p-4 h-56">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={leadSourceData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} />
-                <YAxis stroke="#94a3b8" fontSize={12} />
-                <Tooltip />
-                <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+              <BarChart data={leadSourceData} barCategoryGap="20%">
+                <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
+                <XAxis dataKey="name" stroke="#a1a1aa" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip {...chartTooltipStyle} />
+                <Bar dataKey="value" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         <div className="space-y-4">
-          {/* Today's follow-ups */}
-          <div className="card">
-            <div className="card-header flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-primary-500" />
-                <h3 className="font-semibold text-gray-900 dark:text-white">Upcoming Follow-ups</h3>
+          {/* Upcoming follow-ups */}
+          <div className="card overflow-hidden">
+            <div className="card-header">
+              <div className="flex items-center gap-2.5">
+                <div className="icon-well !w-8 !h-8 bg-primary-50 text-primary-600 dark:bg-primary-500/15 dark:text-primary-400">
+                  <Clock className="w-3.5 h-3.5" />
+                </div>
+                <h3 className="font-display font-bold text-surface-900 dark:text-white text-sm">Upcoming Follow-ups</h3>
               </div>
-              <Link to="/followups" className="text-sm text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
+              <Link to="/followups" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
                 View all <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
-            <div className="divide-y divide-gray-100 dark:divide-dark-700">
+            <div className="divide-y divide-surface-50 dark:divide-dark-800">
               {upcoming?.followUps?.length === 0 && (
-                <p className="p-4 text-sm text-gray-500 dark:text-dark-400 text-center">No upcoming follow-ups</p>
+                <p className="p-5 text-sm text-surface-400 dark:text-dark-500 text-center">No upcoming follow-ups</p>
               )}
               {upcoming?.followUps?.slice(0, 3).map((fu) => (
-                <div key={fu._id} className="px-4 py-3 flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">{fu.title}</p>
-                    <p className="text-xs text-gray-500 dark:text-dark-400">
-                      {fu.customer?.name || fu.lead?.name || '—'} • {formatTime(fu.followUpDate)}
+                <div key={fu._id} className="px-5 py-3.5 flex items-center justify-between gap-3 hover:bg-surface-50/50 dark:hover:bg-dark-800/30 transition-colors">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-surface-900 dark:text-white truncate">{fu.title}</p>
+                    <p className="text-xs text-surface-500 dark:text-dark-400 mt-0.5">
+                      {fu.customer?.name || fu.lead?.name || '—'} · {formatTime(fu.followUpDate)}
                     </p>
                   </div>
                   <Badge color={fu.status === 'Pending' ? 'warning' : 'success'}>{fu.status}</Badge>
@@ -185,25 +242,27 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Overdue tasks */}
-          <div className="card">
-            <div className="card-header flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-500" />
-                <h3 className="font-semibold text-gray-900 dark:text-white">Overdue Tasks</h3>
+          <div className="card overflow-hidden">
+            <div className="card-header">
+              <div className="flex items-center gap-2.5">
+                <div className="icon-well !w-8 !h-8 bg-red-50 text-red-600 dark:bg-red-500/15 dark:text-red-400">
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                </div>
+                <h3 className="font-display font-bold text-surface-900 dark:text-white text-sm">Overdue Tasks</h3>
               </div>
-              <Link to="/tasks" className="text-sm text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
+              <Link to="/tasks" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
                 View all <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
-            <div className="divide-y divide-gray-100 dark:divide-dark-700">
+            <div className="divide-y divide-surface-50 dark:divide-dark-800">
               {upcoming?.overdueTasks?.length === 0 && (
-                <p className="p-4 text-sm text-gray-500 dark:text-dark-400 text-center">No overdue tasks 🎉</p>
+                <p className="p-5 text-sm text-surface-400 dark:text-dark-500 text-center">No overdue tasks 🎉</p>
               )}
               {upcoming?.overdueTasks?.slice(0, 3).map((task) => (
-                <div key={task._id} className="px-4 py-3 flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">{task.title}</p>
-                    <p className="text-xs text-gray-500 dark:text-dark-400">Due {formatDate(task.dueDate)}</p>
+                <div key={task._id} className="px-5 py-3.5 flex items-center justify-between gap-3 hover:bg-surface-50/50 dark:hover:bg-dark-800/30 transition-colors">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-surface-900 dark:text-white truncate">{task.title}</p>
+                    <p className="text-xs text-surface-500 dark:text-dark-400 mt-0.5">Due {formatDate(task.dueDate)}</p>
                   </div>
                   <Badge color={getPriorityColor(task.priority)}>{task.priority}</Badge>
                 </div>
@@ -215,21 +274,21 @@ const Dashboard: React.FC = () => {
 
       {/* Recent activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="card">
-          <div className="card-header flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Recently Added Leads</h3>
-            <Link to="/leads" className="text-sm text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
+        <div className="card overflow-hidden">
+          <div className="card-header">
+            <h3 className="font-display font-bold text-surface-900 dark:text-white">Recently Added Leads</h3>
+            <Link to="/leads" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
               View all <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
-          <div className="divide-y divide-gray-100 dark:divide-dark-700">
+          <div className="divide-y divide-surface-50 dark:divide-dark-800">
             {upcoming?.recentLeads?.map((lead) => (
-              <div key={lead._id} className="px-4 py-3 flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{lead.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-dark-400">{lead.company || '—'} • {timeAgo(lead.createdAt)}</p>
+              <div key={lead._id} className="px-5 py-3.5 flex items-center justify-between gap-3 hover:bg-surface-50/50 dark:hover:bg-dark-800/30 transition-colors">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-surface-900 dark:text-white truncate">{lead.name}</p>
+                  <p className="text-xs text-surface-500 dark:text-dark-400 mt-0.5">{lead.company || '—'} · {timeAgo(lead.createdAt)}</p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 flex-shrink-0">
                   <Badge color={getStatusColor(lead.status)}>{lead.status}</Badge>
                   <Badge color={getPriorityColor(lead.priority)}>{lead.priority}</Badge>
                 </div>
@@ -238,20 +297,20 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="card">
-          <div className="card-header flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900 dark:text-white">Recently Closed Deals</h3>
-            <Link to="/pipeline" className="text-sm text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
+        <div className="card overflow-hidden">
+          <div className="card-header">
+            <h3 className="font-display font-bold text-surface-900 dark:text-white">Recently Closed Deals</h3>
+            <Link to="/pipeline" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
               View all <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
-          <div className="divide-y divide-gray-100 dark:divide-dark-700">
+          <div className="divide-y divide-surface-50 dark:divide-dark-800">
             {upcoming?.recentDeals?.map((deal) => (
-              <div key={deal._id} className="px-4 py-3 flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{deal.title}</p>
-                  <p className="text-xs text-gray-500 dark:text-dark-400">
-                    {deal.customer?.name || '—'} • {formatCurrency(deal.expectedValue)}
+              <div key={deal._id} className="px-5 py-3.5 flex items-center justify-between gap-3 hover:bg-surface-50/50 dark:hover:bg-dark-800/30 transition-colors">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-surface-900 dark:text-white truncate">{deal.title}</p>
+                  <p className="text-xs text-surface-500 dark:text-dark-400 mt-0.5">
+                    {deal.customer?.name || '—'} · {formatCurrency(deal.expectedValue)}
                   </p>
                 </div>
                 <Badge color={getStatusColor(deal.stage)}>{deal.stage}</Badge>

@@ -18,15 +18,15 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   return (
     <Modal open={open} onClose={onClose} title={title} size="sm">
       <div className="flex items-start gap-4">
-        <div className="w-10 h-10 bg-red-100 dark:bg-red-900/40 rounded-full flex items-center justify-center flex-shrink-0">
+        <div className="w-11 h-11 bg-red-50 dark:bg-red-500/15 rounded-2xl flex items-center justify-center flex-shrink-0 ring-1 ring-red-600/10 dark:ring-red-500/20">
           <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
         </div>
-        <div>
-          <p className="text-sm text-gray-600 dark:text-dark-300">{message}</p>
-          <div className="mt-4 flex gap-3">
+        <div className="flex-1 min-w-0">
+          <p className="text-sm text-surface-600 dark:text-dark-300 leading-relaxed">{message}</p>
+          <div className="mt-5 flex gap-2.5">
             <button onClick={onClose} className="btn-secondary">Cancel</button>
             <button onClick={onConfirm} disabled={loading} className="btn-danger">
-              {loading ? 'Processing...' : confirmText}
+              {loading ? 'Processing…' : confirmText}
             </button>
           </div>
         </div>

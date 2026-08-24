@@ -9,13 +9,20 @@ interface EmptyStateProps {
 
 const EmptyState: React.FC<EmptyStateProps> = ({ title, description, action }) => {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="w-16 h-16 bg-gray-100 dark:bg-dark-700 rounded-full flex items-center justify-center mb-4">
-        <Inbox className="w-8 h-8 text-gray-400 dark:text-dark-500" />
+    <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+      <div className="relative mb-5">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-surface-100 to-surface-200 dark:from-dark-800 dark:to-dark-700 flex items-center justify-center shadow-soft">
+          <Inbox className="w-7 h-7 text-surface-400 dark:text-dark-500" strokeWidth={1.5} />
+        </div>
+        <div className="absolute -inset-2 rounded-3xl bg-primary-500/5 dark:bg-primary-500/10 -z-10" />
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>
-      {description && <p className="mt-1 text-sm text-gray-500 dark:text-dark-400 max-w-sm">{description}</p>}
-      {action && <div className="mt-4">{action}</div>}
+      <h3 className="text-base font-display font-bold text-surface-900 dark:text-white">{title}</h3>
+      {description && (
+        <p className="mt-1.5 text-sm text-surface-500 dark:text-dark-400 max-w-sm leading-relaxed">
+          {description}
+        </p>
+      )}
+      {action && <div className="mt-5">{action}</div>}
     </div>
   );
 };

@@ -166,7 +166,7 @@ const Customers: React.FC = () => {
   };
 
   const inputCls = 'input-field';
-  const labelCls = 'block text-sm font-medium text-gray-700 dark:text-dark-300 mb-1.5';
+  const labelCls = 'label-field';
 
   const detail = customerDetailQuery.data;
 
@@ -190,7 +190,7 @@ const Customers: React.FC = () => {
       <div className="card p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
@@ -219,7 +219,7 @@ const Customers: React.FC = () => {
             <div className="table-container">
               <table className="table">
                 <thead>
-                  <tr className="bg-gray-50 dark:bg-dark-900">
+                  <tr className="bg-surface-50 dark:bg-dark-900">
                     <th>Customer</th>
                     <th>Contact</th>
                     <th>Industry</th>
@@ -234,29 +234,29 @@ const Customers: React.FC = () => {
                   {customersData?.data?.map((c: Customer) => (
                     <tr key={c._id}>
                       <td>
-                        <button onClick={() => setViewing(c)} className="font-medium text-primary-600 dark:text-primary-400 hover:underline">
+                        <button onClick={() => setViewing(c)} className="font-semibold text-primary-600 dark:text-primary-400 hover:underline">
                           {c.name}
                         </button>
-                        <p className="text-xs text-gray-500 dark:text-dark-400">{c.company || '—'}</p>
+                        <p className="text-xs text-surface-500 dark:text-dark-400">{c.company || '—'}</p>
                       </td>
                       <td>
                         <p>{c.email || '—'}</p>
-                        <p className="text-xs text-gray-500 dark:text-dark-400">{c.phone || ''}</p>
+                        <p className="text-xs text-surface-500 dark:text-dark-400">{c.phone || ''}</p>
                       </td>
                       <td>{c.industry || '—'}</td>
                       <td><Badge color={getStatusColor(c.status)}>{c.status}</Badge></td>
-                      <td>{c.assignedTo?.name || <span className="text-gray-400">Unassigned</span>}</td>
+                      <td>{c.assignedTo?.name || <span className="text-surface-400">Unassigned</span>}</td>
                       <td className="font-medium">{formatCurrency(c.totalPurchases)}</td>
                       <td>{formatDate(c.lastPurchase)}</td>
                       <td>
                         <div className="flex items-center justify-end gap-1">
-                          <button onClick={() => setViewing(c)} className="p-1.5 rounded-lg text-gray-400 hover:text-primary-600 hover:bg-primary-50">
+                          <button onClick={() => setViewing(c)} className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
                             <Eye className="w-4 h-4" />
                           </button>
-                          <button onClick={() => openEdit(c)} className="p-1.5 rounded-lg text-gray-400 hover:text-primary-600 hover:bg-primary-50">
+                          <button onClick={() => openEdit(c)} className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
                             <Pencil className="w-4 h-4" />
                           </button>
-                          <button onClick={() => setDeleting(c)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50">
+                          <button onClick={() => setDeleting(c)} className="p-1.5 rounded-xl text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
@@ -313,8 +313,8 @@ const Customers: React.FC = () => {
             <label className={labelCls}>Tags</label>
             <input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} placeholder="vip, tech" className={inputCls} />
           </div>
-          <div className="sm:col-span-2 border-t border-gray-100 dark:border-dark-700 pt-3">
-            <p className="text-xs font-medium text-gray-500 uppercase mb-3">Address</p>
+          <div className="sm:col-span-2 border-t border-surface-100 dark:border-dark-700 pt-3">
+            <p className="text-xs font-medium text-surface-500 uppercase mb-3">Address</p>
             <div className="grid grid-cols-2 gap-3">
               <input value={form.address.street} onChange={(e) => setForm({ ...form, address: { ...form.address, street: e.target.value } })} placeholder="Street" className={inputCls} />
               <input value={form.address.city} onChange={(e) => setForm({ ...form, address: { ...form.address, city: e.target.value } })} placeholder="City" className={inputCls} />
@@ -340,12 +340,12 @@ const Customers: React.FC = () => {
             {/* Profile header */}
             <div className="flex items-start justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-primary-100 dark:bg-primary-900/40 rounded-xl flex items-center justify-center">
-                  <Building2 className="w-7 h-7 text-primary-600 dark:text-primary-400" />
+                <div className="w-14 h-14 bg-brand-gradient rounded-2xl shadow-sm flex items-center justify-center">
+                  <Building2 className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">{detail.customer.name}</h3>
-                  <p className="text-sm text-gray-500 dark:text-dark-400">
+                  <h3 className="text-xl font-bold text-surface-900 dark:text-white">{detail.customer.name}</h3>
+                  <p className="text-sm text-surface-500 dark:text-dark-400">
                     {detail.customer.company} • Customer since {formatDate(detail.customer.createdAt)}
                   </p>
                 </div>
@@ -360,50 +360,50 @@ const Customers: React.FC = () => {
 
             {/* Contact info */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-              <div className="flex items-center gap-2 text-gray-600 dark:text-dark-300">
-                <Mail className="w-4 h-4 text-gray-400" /> {detail.customer.email || '—'}
+              <div className="flex items-center gap-2 text-surface-600 dark:text-dark-300">
+                <Mail className="w-4 h-4 text-surface-400" /> {detail.customer.email || '—'}
               </div>
-              <div className="flex items-center gap-2 text-gray-600 dark:text-dark-300">
-                <Phone className="w-4 h-4 text-gray-400" /> {detail.customer.phone || '—'}
+              <div className="flex items-center gap-2 text-surface-600 dark:text-dark-300">
+                <Phone className="w-4 h-4 text-surface-400" /> {detail.customer.phone || '—'}
               </div>
-              <div className="flex items-center gap-2 text-gray-600 dark:text-dark-300">
-                <MapPin className="w-4 h-4 text-gray-400" />
+              <div className="flex items-center gap-2 text-surface-600 dark:text-dark-300">
+                <MapPin className="w-4 h-4 text-surface-400" />
                 {detail.customer.address?.city || '—'}{detail.customer.address?.country ? ', ' + detail.customer.address.country : ''}
               </div>
             </div>
 
             {/* KPIs */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="bg-gray-50 dark:bg-dark-700 rounded-lg p-4">
-                <p className="text-xs text-gray-500 dark:text-dark-400">Total Purchases</p>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">{formatCurrency(detail.customer.totalPurchases)}</p>
+              <div className="bg-surface-50 dark:bg-dark-800/60 rounded-xl p-4 ring-1 ring-surface-100 dark:ring-dark-700">
+                <p className="text-xs text-surface-500 dark:text-dark-400">Total Purchases</p>
+                <p className="text-xl font-bold text-surface-900 dark:text-white">{formatCurrency(detail.customer.totalPurchases)}</p>
               </div>
-              <div className="bg-gray-50 dark:bg-dark-700 rounded-lg p-4">
-                <p className="text-xs text-gray-500 dark:text-dark-400">Active Opportunities</p>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">{detail.opportunities?.length || 0}</p>
+              <div className="bg-surface-50 dark:bg-dark-800/60 rounded-xl p-4 ring-1 ring-surface-100 dark:ring-dark-700">
+                <p className="text-xs text-surface-500 dark:text-dark-400">Active Opportunities</p>
+                <p className="text-xl font-bold text-surface-900 dark:text-white">{detail.opportunities?.length || 0}</p>
               </div>
-              <div className="bg-gray-50 dark:bg-dark-700 rounded-lg p-4">
-                <p className="text-xs text-gray-500 dark:text-dark-400">Interactions</p>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">{detail.interactions?.length || 0}</p>
+              <div className="bg-surface-50 dark:bg-dark-800/60 rounded-xl p-4 ring-1 ring-surface-100 dark:ring-dark-700">
+                <p className="text-xs text-surface-500 dark:text-dark-400">Interactions</p>
+                <p className="text-xl font-bold text-surface-900 dark:text-white">{detail.interactions?.length || 0}</p>
               </div>
-              <div className="bg-gray-50 dark:bg-dark-700 rounded-lg p-4">
-                <p className="text-xs text-gray-500 dark:text-dark-400">Open Tasks</p>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">{detail.tasks?.length || 0}</p>
+              <div className="bg-surface-50 dark:bg-dark-800/60 rounded-xl p-4 ring-1 ring-surface-100 dark:ring-dark-700">
+                <p className="text-xs text-surface-500 dark:text-dark-400">Open Tasks</p>
+                <p className="text-xl font-bold text-surface-900 dark:text-white">{detail.tasks?.length || 0}</p>
               </div>
             </div>
 
             {/* Opportunities */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-dark-200 mb-3">Active Opportunities</h4>
+              <h4 className="text-sm font-semibold text-surface-700 dark:text-dark-200 mb-3">Active Opportunities</h4>
               {detail.opportunities?.length === 0 ? (
-                <p className="text-sm text-gray-400">No active opportunities</p>
+                <p className="text-sm text-surface-400">No active opportunities</p>
               ) : (
                 <div className="space-y-2">
                   {detail.opportunities?.map((opp: any) => (
-                    <div key={opp._id} className="flex items-center justify-between bg-gray-50 dark:bg-dark-700 p-3 rounded-lg">
+                    <div key={opp._id} className="flex items-center justify-between bg-surface-50 dark:bg-dark-700 p-3 rounded-lg">
                       <div>
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{opp.title}</p>
-                        <p className="text-xs text-gray-500 dark:text-dark-400">Assigned to {opp.assignedTo?.name || '—'}</p>
+                        <p className="text-sm font-medium text-surface-900 dark:text-white">{opp.title}</p>
+                        <p className="text-xs text-surface-500 dark:text-dark-400">Assigned to {opp.assignedTo?.name || '—'}</p>
                       </div>
                       <div className="text-right">
                         <Badge color={getStatusColor(opp.stage)}>{opp.stage}</Badge>
@@ -417,9 +417,9 @@ const Customers: React.FC = () => {
 
             {/* Interactions timeline */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-dark-200 mb-3">Activity Timeline</h4>
+              <h4 className="text-sm font-semibold text-surface-700 dark:text-dark-200 mb-3">Activity Timeline</h4>
               {detail.interactions?.length === 0 ? (
-                <p className="text-sm text-gray-400">No interactions recorded</p>
+                <p className="text-sm text-surface-400">No interactions recorded</p>
               ) : (
                 <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
                   {detail.interactions?.map((i: any) => (
@@ -427,11 +427,11 @@ const Customers: React.FC = () => {
                       <div className="w-2 h-2 mt-1.5 rounded-full bg-primary-500 flex-shrink-0" />
                       <div>
                         <p className="text-sm">
-                          <span className="font-medium text-gray-900 dark:text-white">{i.subject}</span>{' '}
-                          <span className="text-gray-500 dark:text-dark-400">— {i.type}</span>
+                          <span className="font-medium text-surface-900 dark:text-white">{i.subject}</span>{' '}
+                          <span className="text-surface-500 dark:text-dark-400">— {i.type}</span>
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-dark-400">{i.description}</p>
-                        <p className="text-xs text-gray-400 mt-0.5">{i.performedBy?.name} • {timeAgo(i.createdAt)}</p>
+                        <p className="text-xs text-surface-500 dark:text-dark-400">{i.description}</p>
+                        <p className="text-xs text-surface-400 mt-0.5">{i.performedBy?.name} • {timeAgo(i.createdAt)}</p>
                       </div>
                     </div>
                   ))}
@@ -441,14 +441,14 @@ const Customers: React.FC = () => {
 
             {/* Follow-ups */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-dark-200 mb-3">Upcoming Follow-ups</h4>
+              <h4 className="text-sm font-semibold text-surface-700 dark:text-dark-200 mb-3">Upcoming Follow-ups</h4>
               {detail.followups?.filter((f: any) => f.status === 'Pending').length === 0 ? (
-                <p className="text-sm text-gray-400">No pending follow-ups</p>
+                <p className="text-sm text-surface-400">No pending follow-ups</p>
               ) : (
                 <div className="space-y-2">
                   {detail.followups?.filter((f: any) => f.status === 'Pending').map((f: any) => (
-                    <div key={f._id} className="flex items-center justify-between bg-gray-50 dark:bg-dark-700 p-3 rounded-lg">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">{f.title}</p>
+                    <div key={f._id} className="flex items-center justify-between bg-surface-50 dark:bg-dark-700 p-3 rounded-lg">
+                      <p className="text-sm font-medium text-surface-900 dark:text-white">{f.title}</p>
                       <Badge color={getStatusColor(f.status)}>{f.status} • {formatDate(f.followUpDate)}</Badge>
                     </div>
                   ))}
