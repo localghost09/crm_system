@@ -265,13 +265,13 @@ const Customers: React.FC = () => {
                       <td>{formatDate(c.lastPurchase)}</td>
                       <td>
                         <div className="flex items-center justify-end gap-1">
-                          <button onClick={() => setViewing(c)} className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                          <button onClick={() => setViewing(c)} className="p-1.5 rounded text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
                             <Eye className="w-4 h-4" />
                           </button>
-                          <button onClick={() => openEdit(c)} className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                          <button onClick={() => openEdit(c)} className="p-1.5 rounded text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
                             <Pencil className="w-4 h-4" />
                           </button>
-                          <button onClick={() => setDeleting(c)} className="p-1.5 rounded-xl text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                          <button onClick={() => setDeleting(c)} className="p-1.5 rounded text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
@@ -325,7 +325,7 @@ const Customers: React.FC = () => {
             <label className={labelCls}>Tags</label>
             <input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} placeholder="vip, tech" className={inputCls} />
           </div>
-          <div className="sm:col-span-2 border-t border-surface-100 dark:border-dark-700 pt-3">
+          <div className="sm:col-span-2 border-t border-surface-200 dark:border-dark-700 pt-3">
             <p className="text-xs font-medium text-surface-500 uppercase mb-3">Address</p>
             <div className="grid grid-cols-2 gap-3">
               <input value={form.address.street} onChange={(e) => setForm({ ...form, address: { ...form.address, street: e.target.value } })} placeholder="Street" className={inputCls} />
@@ -352,11 +352,11 @@ const Customers: React.FC = () => {
             {/* Profile header */}
             <div className="flex items-start justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-brand-gradient rounded-2xl shadow-sm flex items-center justify-center">
+                <div className="w-14 h-14 bg-surface-200 text-surface-700 dark:bg-dark-700 dark:text-dark-100 rounded shadow-sm flex items-center justify-center">
                   <Building2 className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-surface-900 dark:text-white">{detail.customer.name}</h3>
+                  <h3 className="text-xl font-semibold text-surface-900 dark:text-white">{detail.customer.name}</h3>
                   <p className="text-sm text-surface-500 dark:text-dark-400">
                     {detail.customer.company} • Customer since {formatDate(detail.customer.createdAt)}
                   </p>
@@ -386,21 +386,21 @@ const Customers: React.FC = () => {
 
             {/* KPIs */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="bg-surface-50 dark:bg-dark-800/60 rounded-xl p-4 ring-1 ring-surface-100 dark:ring-dark-700">
+              <div className="bg-surface-50 dark:bg-dark-800/60 rounded p-4 ring-1 ring-surface-100 dark:ring-dark-700">
                 <p className="text-xs text-surface-500 dark:text-dark-400">Total Purchases</p>
-                <p className="text-xl font-bold text-surface-900 dark:text-white">{formatCurrency(detail.customer.totalPurchases)}</p>
+                <p className="text-xl font-semibold text-surface-900 dark:text-white">{formatCurrency(detail.customer.totalPurchases)}</p>
               </div>
-              <div className="bg-surface-50 dark:bg-dark-800/60 rounded-xl p-4 ring-1 ring-surface-100 dark:ring-dark-700">
+              <div className="bg-surface-50 dark:bg-dark-800/60 rounded p-4 ring-1 ring-surface-100 dark:ring-dark-700">
                 <p className="text-xs text-surface-500 dark:text-dark-400">Active Opportunities</p>
-                <p className="text-xl font-bold text-surface-900 dark:text-white">{detail.opportunities?.length || 0}</p>
+                <p className="text-xl font-semibold text-surface-900 dark:text-white">{detail.opportunities?.length || 0}</p>
               </div>
-              <div className="bg-surface-50 dark:bg-dark-800/60 rounded-xl p-4 ring-1 ring-surface-100 dark:ring-dark-700">
+              <div className="bg-surface-50 dark:bg-dark-800/60 rounded p-4 ring-1 ring-surface-100 dark:ring-dark-700">
                 <p className="text-xs text-surface-500 dark:text-dark-400">Interactions</p>
-                <p className="text-xl font-bold text-surface-900 dark:text-white">{detail.interactions?.length || 0}</p>
+                <p className="text-xl font-semibold text-surface-900 dark:text-white">{detail.interactions?.length || 0}</p>
               </div>
-              <div className="bg-surface-50 dark:bg-dark-800/60 rounded-xl p-4 ring-1 ring-surface-100 dark:ring-dark-700">
+              <div className="bg-surface-50 dark:bg-dark-800/60 rounded p-4 ring-1 ring-surface-100 dark:ring-dark-700">
                 <p className="text-xs text-surface-500 dark:text-dark-400">Open Tasks</p>
-                <p className="text-xl font-bold text-surface-900 dark:text-white">{detail.tasks?.length || 0}</p>
+                <p className="text-xl font-semibold text-surface-900 dark:text-white">{detail.tasks?.length || 0}</p>
               </div>
             </div>
 

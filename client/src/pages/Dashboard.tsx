@@ -19,16 +19,16 @@ import { normalizeMonthlySeries } from '../utils/chartData';
 import type { DashboardSummary, ChartData, Task } from '../types';
 import { PageSkeleton } from '../components/common/Skeleton';
 
-const PIPELINE_COLORS = ['#8b5cf6', '#06b6d4', '#6366f1', '#10b981', '#f59e0b', '#ec4899', '#ef4444'];
+const PIPELINE_COLORS = ['#3167a6', '#4f775b', '#7c7b76', '#4f775b', '#b07d2b', '#9c5b4e', '#a83c3c'];
 
 const STATUS_COLORS: Record<string, string> = {
   New: '#0ea5e9',
-  Contacted: '#6366f1',
-  Qualified: '#8b5cf6',
-  'Proposal Sent': '#f59e0b',
+  Contacted: '#7c7b76',
+  Qualified: '#3167a6',
+  'Proposal Sent': '#b07d2b',
   Negotiation: '#f97316',
-  Won: '#10b981',
-  Lost: '#ef4444',
+  Won: '#4f775b',
+  Lost: '#a83c3c',
 };
 
 const ACTIVITY_COLORS = (action: string) => {
@@ -37,8 +37,8 @@ const ACTIVITY_COLORS = (action: string) => {
   if (a.includes('deleted')) return 'bg-red-500';
   if (a.includes('login')) return 'bg-sky-500';
   if (a.includes('role')) return 'bg-amber-500';
-  if (a.includes('convert')) return 'bg-violet-500';
-  if (a.includes('updated') || a.includes('changed')) return 'bg-indigo-500';
+  if (a.includes('convert')) return 'bg-primary-500';
+  if (a.includes('updated') || a.includes('changed')) return 'bg-primary-500';
   return 'bg-surface-400';
 };
 
@@ -60,8 +60,8 @@ const splineDot = (color: string, dataLength: number) => (props: any) => {
   const isLast = index === dataLength - 1;
   return (
     <g>
-      {isLast && <circle cx={cx} cy={cy} r={11} fill={color} fillOpacity={0.15} />}
-      <circle cx={cx} cy={cy} r={isLast ? 5 : 3} fill={color} stroke="#fff" strokeWidth={2} />
+      {isLast && <circle cx={cx} cy={cy} r={7} fill={color} fillOpacity={0.15} />}
+      <circle cx={cx} cy={cy} r={isLast ? 3.5 : 2} fill={color} stroke="#fff" strokeWidth={2} />
     </g>
   );
 };
@@ -155,14 +155,14 @@ const Dashboard: React.FC = () => {
           <h1 className="page-title">Dashboard</h1>
           <p className="page-subtitle">Welcome back! Here&apos;s your sales overview.</p>
         </div>
-        <div className="flex items-center gap-1 bg-white dark:bg-dark-900 border border-surface-200 dark:border-dark-700 rounded-xl p-1 shadow-soft">
+        <div className="flex items-center gap-1 bg-white dark:bg-dark-900 border border-surface-200 dark:border-dark-700 rounded p-0.5">
           {['7d', '30d', '90d'].map((r) => (
             <button
               key={r}
               onClick={() => setRange(r)}
-              className={`px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+              className={`px-2.5 py-1 rounded-sm text-sm transition-colors duration-100 ${
                 range === r
-                  ? 'bg-primary-600 text-white shadow-sm shadow-primary-600/30'
+                  ? 'bg-primary-600 text-white'
                   : 'text-surface-500 hover:text-surface-700 dark:text-dark-400 dark:hover:text-dark-200'
               }`}
             >
@@ -175,8 +175,8 @@ const Dashboard: React.FC = () => {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Total Customers" value={kpi?.totalCustomers || 0} icon={Users} color="blue" subtext="Active accounts" />
-        <StatCard label="Total Leads" value={kpi?.totalLeads || 0} icon={UserPlus} color="indigo" subtext={`${kpi?.conversionRate || 0}% conversion rate`} />
-        <StatCard label="Active Opportunities" value={kpi?.pipelineOpportunities || 0} icon={Target} color="purple" subtext={`${formatCurrency(kpi?.pipelineValue || 0)} pipeline`} />
+        <StatCard label="Total Leads" value={kpi?.totalLeads || 0} icon={UserPlus} color="blue" subtext={`${kpi?.conversionRate || 0}% conversion rate`} />
+        <StatCard label="Active Opportunities" value={kpi?.pipelineOpportunities || 0} icon={Target} color="blue" subtext={`${formatCurrency(kpi?.pipelineValue || 0)} pipeline`} />
         <StatCard label="Revenue" value={formatCurrency(kpi?.revenue || 0)} icon={DollarSign} color="green" subtext={`${kpi?.wonOpportunities || 0} deals won`} />
       </div>
 
@@ -186,11 +186,8 @@ const Dashboard: React.FC = () => {
         <div className="card overflow-hidden">
           <div className="card-header">
             <div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">Revenue Trend</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">Revenue Trend</h3>
               <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">Won deal revenue over time</p>
-            </div>
-            <div className="icon-well bg-primary-50 text-primary-600 dark:bg-primary-500/15 dark:text-primary-400">
-              <BarChart3 className="w-4 h-4" />
             </div>
           </div>
           <div className="p-4 h-72">
@@ -198,23 +195,23 @@ const Dashboard: React.FC = () => {
               <AreaChart data={revenueChartData} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.35} />
-                    <stop offset="60%" stopColor="#8b5cf6" stopOpacity={0.08} />
-                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#3167a6" stopOpacity={0.18} />
+                    <stop offset="60%" stopColor="#3167a6" stopOpacity={0.08} />
+                    <stop offset="100%" stopColor="#3167a6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
-                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dy={6} />
-                <YAxis tickFormatter={(v) => `$${Number(v) / 1000}k`} stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} width={44} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e4e3e0" vertical={false} />
+                <XAxis dataKey="month" stroke="#7c7b76" fontSize={11} tickLine={false} axisLine={false} dy={6} />
+                <YAxis tickFormatter={(v) => `$${Number(v) / 1000}k`} stroke="#7c7b76" fontSize={11} tickLine={false} axisLine={false} width={44} />
                 <Tooltip formatter={(v) => formatCurrency(Number(v))} {...chartTooltipStyle} />
                 <Area
                   type="monotone"
                   dataKey="revenue"
-                  stroke="#7c3aed"
-                  strokeWidth={3}
+                  stroke="#255288"
+                  strokeWidth={1.75}
                   fill="url(#revenueGrad)"
-                  dot={splineDot('#7c3aed', revenueChartData.length)}
-                  activeDot={{ r: 6, fill: '#7c3aed', stroke: '#fff', strokeWidth: 2 }}
+                  dot={splineDot('#255288', revenueChartData.length)}
+                  activeDot={{ r: 4, fill: '#255288', stroke: '#fff', strokeWidth: 2 }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -225,11 +222,8 @@ const Dashboard: React.FC = () => {
         <div className="card overflow-hidden">
           <div className="card-header">
             <div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">Customer Growth</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">Customer Growth</h3>
               <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">New customers per month</p>
-            </div>
-            <div className="icon-well bg-cyan-50 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-400">
-              <Users className="w-4 h-4" />
             </div>
           </div>
           <div className="p-4 h-72">
@@ -237,23 +231,23 @@ const Dashboard: React.FC = () => {
               <AreaChart data={customerGrowthData} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="customerGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.35} />
-                    <stop offset="60%" stopColor="#06b6d4" stopOpacity={0.08} />
-                    <stop offset="100%" stopColor="#06b6d4" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#4f775b" stopOpacity={0.18} />
+                    <stop offset="60%" stopColor="#4f775b" stopOpacity={0.08} />
+                    <stop offset="100%" stopColor="#4f775b" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
-                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dy={6} />
-                <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} width={36} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e4e3e0" vertical={false} />
+                <XAxis dataKey="month" stroke="#7c7b76" fontSize={11} tickLine={false} axisLine={false} dy={6} />
+                <YAxis stroke="#7c7b76" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} width={36} />
                 <Tooltip {...chartTooltipStyle} />
                 <Area
                   type="monotone"
                   dataKey="customers"
-                  stroke="#06b6d4"
-                  strokeWidth={3}
+                  stroke="#4f775b"
+                  strokeWidth={1.75}
                   fill="url(#customerGrad)"
-                  dot={splineDot('#06b6d4', customerGrowthData.length)}
-                  activeDot={{ r: 6, fill: '#06b6d4', stroke: '#fff', strokeWidth: 2 }}
+                  dot={splineDot('#4f775b', customerGrowthData.length)}
+                  activeDot={{ r: 4, fill: '#4f775b', stroke: '#fff', strokeWidth: 2 }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -267,7 +261,7 @@ const Dashboard: React.FC = () => {
         <div className="card overflow-hidden">
           <div className="card-header">
             <div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">Lead Status</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">Lead Status</h3>
               <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">Distribution by stage</p>
             </div>
           </div>
@@ -280,7 +274,7 @@ const Dashboard: React.FC = () => {
         <div className="card overflow-hidden">
           <div className="card-header">
             <div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">Lead Sources</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">Lead Sources</h3>
               <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">Where your leads come from</p>
             </div>
           </div>
@@ -299,7 +293,7 @@ const Dashboard: React.FC = () => {
               <div className="icon-well !w-8 !h-8 bg-primary-50 text-primary-600 dark:bg-primary-500/15 dark:text-primary-400">
                 <Clock className="w-3.5 h-3.5" />
               </div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white text-sm">Upcoming Follow-ups</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white text-sm">Upcoming Follow-ups</h3>
             </div>
               <Link to="/followups" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
                 View all <ArrowRight className="w-3 h-3" />
@@ -330,7 +324,7 @@ const Dashboard: React.FC = () => {
                 <div className="icon-well !w-8 !h-8 bg-red-50 text-red-600 dark:bg-red-500/15 dark:text-red-400">
                   <AlertTriangle className="w-3.5 h-3.5" />
                 </div>
-                <h3 className="font-display font-bold text-surface-900 dark:text-white text-sm">Overdue Tasks</h3>
+                <h3 className="font-semibold text-surface-900 dark:text-white text-sm">Overdue Tasks</h3>
               </div>
               <Link to="/tasks" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
                 View all <ArrowRight className="w-3 h-3" />
@@ -362,9 +356,9 @@ const Dashboard: React.FC = () => {
               <div className="icon-well !w-8 !h-8 bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400">
                 <ListTodo className="w-3.5 h-3.5" />
               </div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white text-sm">Today&apos;s Tasks</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white text-sm">Today&apos;s Tasks</h3>
               {todayTasks.length > 0 && (
-                <span className="text-[11px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400 px-2 py-0.5 rounded-lg">
+                <span className="text-[11px] font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400 px-2 py-0.5 rounded-lg">
                   {todayTasks.length}
                 </span>
               )}
@@ -388,7 +382,7 @@ const Dashboard: React.FC = () => {
                     }
                     disabled={busy}
                     aria-label={`Mark "${task.title}" complete`}
-                    className={`w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center transition-all duration-200
+                    className={`w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center transition-colors duration-100
                       ${busy ? 'border-primary-400' : 'border-surface-300 dark:border-dark-600 hover:border-primary-500'}`}
                   >
                     {busy && <Loader2 className="w-3 h-3 text-primary-500 animate-spin" />}
@@ -425,7 +419,7 @@ const Dashboard: React.FC = () => {
               <div className="icon-well !w-8 !h-8 bg-sky-50 text-sky-600 dark:bg-sky-500/15 dark:text-sky-400">
                 <Activity className="w-3.5 h-3.5" />
               </div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white text-sm">Recent Activity</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white text-sm">Recent Activity</h3>
             </div>
             <Link to="/audit" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
               View all <ArrowRight className="w-3 h-3" />
@@ -460,7 +454,7 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="card overflow-hidden">
           <div className="card-header">
-            <h3 className="font-display font-bold text-surface-900 dark:text-white">Recently Added Leads</h3>
+            <h3 className="font-semibold text-surface-900 dark:text-white">Recently Added Leads</h3>
             <Link to="/leads" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
               View all <ArrowRight className="w-3 h-3" />
             </Link>
@@ -486,7 +480,7 @@ const Dashboard: React.FC = () => {
 
         <div className="card overflow-hidden">
           <div className="card-header">
-            <h3 className="font-display font-bold text-surface-900 dark:text-white">Recently Closed Deals</h3>
+            <h3 className="font-semibold text-surface-900 dark:text-white">Recently Closed Deals</h3>
             <Link to="/pipeline" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1">
               View all <ArrowRight className="w-3 h-3" />
             </Link>

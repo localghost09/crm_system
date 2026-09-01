@@ -16,7 +16,7 @@ interface DonutBreakdownProps {
   valueSuffix?: string;
 }
 
-const DEFAULT_COLORS = ['#8b5cf6', '#06b6d4', '#6366f1', '#10b981', '#f59e0b', '#ec4899', '#ef4444', '#14b8a6'];
+const DEFAULT_COLORS = ['#3167a6', '#4f775b', '#7c7b76', '#4f775b', '#b07d2b', '#9c5b4e', '#a83c3c', '#4f7a80'];
 
 const tooltipStyle = {
   contentStyle: {
@@ -79,7 +79,7 @@ const DonutBreakdown: React.FC<DonutBreakdownProps> = ({
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-2xl font-bold font-display tracking-tight text-surface-900 dark:text-white leading-none">
+          <span className="text-2xl font-semibold tracking-tight text-surface-900 dark:text-white leading-none">
             {total}
           </span>
           <span className="text-[11px] font-medium text-surface-400 dark:text-dark-500 mt-1">{centerLabel}</span>

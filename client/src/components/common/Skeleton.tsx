@@ -27,14 +27,14 @@ export const TableSkeleton: React.FC<{ rows?: number; cols?: number }> = ({ rows
 );
 
 export const StatSkeleton: React.FC = () => (
-  <div className="card p-5 animate-pulse">
+  <div className="card p-4 animate-pulse">
     <div className="flex justify-between">
       <div className="flex-1">
         <div className="h-3.5 w-24 bg-surface-200 dark:bg-dark-700 rounded-lg mb-3" />
         <div className="h-7 w-16 bg-surface-200 dark:bg-dark-700 rounded-lg" />
         <div className="h-3 w-20 bg-surface-200 dark:bg-dark-700 rounded-lg mt-2" />
       </div>
-      <div className="w-10 h-10 bg-surface-200 dark:bg-dark-700 rounded-xl" />
+      <div className="w-10 h-10 bg-surface-200 dark:bg-dark-700 rounded" />
     </div>
   </div>
 );

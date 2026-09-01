@@ -29,17 +29,17 @@ const Settings: React.FC = () => {
         {/* Profile */}
         <div className="card overflow-hidden">
           <div className="card-header">
-            <h3 className="font-display font-bold text-surface-900 dark:text-white">Profile</h3>
+            <h3 className="font-semibold text-surface-900 dark:text-white">Profile</h3>
           </div>
           <div className="card-body space-y-5">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-brand-gradient rounded-2xl flex items-center justify-center shadow-glow">
-                <span className="text-2xl font-bold text-white">
+              <div className="w-16 h-16 bg-surface-200 text-surface-700 dark:bg-dark-700 dark:text-dark-100 rounded flex items-center justify-center">
+                <span className="text-2xl font-semibold text-white">
                   {user?.name?.charAt(0)?.toUpperCase()}
                 </span>
               </div>
               <div>
-                <p className="text-lg font-display font-bold text-surface-900 dark:text-white">{user?.name}</p>
+                <p className="text-lg font-semibold text-surface-900 dark:text-white">{user?.name}</p>
                 <p className="text-sm text-surface-500 dark:text-dark-400">{user?.email}</p>
                 <Badge color={user?.role === 'admin' ? 'danger' : user?.role === 'manager' ? 'warning' : 'info'} className="mt-1">
                   {user?.role}
@@ -72,7 +72,7 @@ const Settings: React.FC = () => {
           <div className="card-header">
             <div className="flex items-center gap-2">
               <KeyRound className="w-4 h-4 text-surface-400" />
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">Security</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">Security</h3>
             </div>
           </div>
           <div className="card-body space-y-4">
@@ -82,7 +82,7 @@ const Settings: React.FC = () => {
               <input type="password" placeholder="New password" className="input-field mb-3" />
               <input type="password" placeholder="Confirm new password" className="input-field" />
             </div>
-            <div className="flex items-center justify-between bg-surface-50 dark:bg-dark-800/60 rounded-2xl p-4 ring-1 ring-surface-100 dark:ring-dark-700">
+            <div className="flex items-center justify-between bg-surface-50 dark:bg-dark-800/60 rounded p-4 ring-1 ring-surface-100 dark:ring-dark-700">
               <div className="flex items-center gap-3">
                 <div className="icon-well !w-9 !h-9 bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400">
                   <Shield className="w-4 h-4" />
@@ -102,12 +102,12 @@ const Settings: React.FC = () => {
           <div className="card-header">
             <div className="flex items-center gap-2">
               <Bell className="w-4 h-4 text-surface-400" />
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">Notification Preferences</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">Notification Preferences</h3>
             </div>
           </div>
           <div className="card-body space-y-1">
             {['New lead assignments', 'Follow-up reminders', 'Overdue task alerts', 'Deal status changes'].map((pref) => (
-              <label key={pref} className="flex items-center justify-between cursor-pointer py-2.5 px-3 rounded-xl hover:bg-surface-50 dark:hover:bg-dark-800/50 transition-colors">
+              <label key={pref} className="flex items-center justify-between cursor-pointer py-2.5 px-3 rounded hover:bg-surface-50 dark:hover:bg-dark-800/50 transition-colors">
                 <span className="text-sm font-medium text-surface-700 dark:text-dark-200">{pref}</span>
                 <input type="checkbox" defaultChecked className="w-4 h-4 text-primary-600 rounded-md focus:ring-primary-500 border-surface-300" />
               </label>
@@ -120,7 +120,7 @@ const Settings: React.FC = () => {
           <div className="card-header">
             <div className="flex items-center gap-2">
               <Database className="w-4 h-4 text-surface-400" />
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">System Information</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">System Information</h3>
             </div>
           </div>
           <div className="card-body">
@@ -131,7 +131,7 @@ const Settings: React.FC = () => {
                 { label: 'Database', value: 'MongoDB' },
                 { label: 'Last backup', value: '—' },
               ].map((item) => (
-                <div key={item.label} className="p-3 rounded-xl bg-surface-50 dark:bg-dark-800/50">
+                <div key={item.label} className="p-3 rounded bg-surface-50 dark:bg-dark-800/50">
                   <p className="text-xs font-medium text-surface-500 dark:text-dark-400">{item.label}</p>
                   <p className="font-semibold text-surface-900 dark:text-white mt-0.5">{item.value}</p>
                 </div>

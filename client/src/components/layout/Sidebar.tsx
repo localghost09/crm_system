@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, Users, UserCircle, TrendingUp, CheckSquare,
-  Calendar, Bell, BarChart3, Settings, Shield, X, Building2, Sparkles
+  Calendar, Bell, BarChart3, Settings, Shield, X, Building2
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -41,7 +41,7 @@ const NavSection: React.FC<{
   if (filtered.length === 0) return null;
 
   return (
-    <div className="mb-5">
+    <div className="mb-4">
       {label && <p className="section-label">{label}</p>}
       <div className="space-y-0.5">
         {filtered.map((item) => (
@@ -84,9 +84,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
       )}
       <aside
         className={`
-          fixed top-0 left-0 z-50 h-full w-[272px]
-          bg-white/90 dark:bg-dark-900/95 backdrop-blur-xl
-          border-r border-surface-200/80 dark:border-dark-800
+          fixed top-0 left-0 z-50 h-full w-[236px]
+          bg-white dark:bg-dark-900 border-r border-surface-200 dark:border-dark-800
           transform transition-transform duration-300 ease-out
           lg:translate-x-0 lg:static lg:z-auto
           flex flex-col
@@ -94,19 +93,14 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
         `}
       >
         {/* Brand */}
-        <div className="flex items-center justify-between px-5 h-16 border-b border-surface-100 dark:border-dark-800 flex-shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-brand-gradient shadow-glow flex items-center justify-center">
-              <Sparkles className="w-4.5 h-4.5 text-white" strokeWidth={2.5} />
+        <div className="flex items-center justify-between px-4 h-[52px] border-b border-surface-200 dark:border-dark-800 flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-sm bg-primary-600 flex items-center justify-center">
+              <span className="text-[11px] font-semibold text-white">C</span>
             </div>
-            <div>
-              <span className="font-display font-bold text-[15px] text-surface-900 dark:text-white tracking-tight">
-                CRM Pro
-              </span>
-              <p className="text-[10px] font-medium text-surface-400 dark:text-dark-500 -mt-0.5 tracking-wide uppercase">
-                Enterprise
-              </p>
-            </div>
+            <span className="font-semibold text-sm text-surface-800 dark:text-white">
+              CRM Pro
+            </span>
           </div>
           <button
             onClick={onClose}
@@ -118,17 +112,17 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-3 overflow-y-auto">
+        <nav className="flex-1 px-2 py-3 overflow-y-auto">
           <NavSection items={mainNav} role={role} onClose={onClose} label="Main" />
           <NavSection items={workNav} role={role} onClose={onClose} label="Workspace" />
           <NavSection items={adminNav} role={role} onClose={onClose} label="Manage" />
         </nav>
 
         {/* User footer */}
-        <div className="p-3 border-t border-surface-100 dark:border-dark-800 flex-shrink-0">
-          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-surface-50 dark:bg-dark-800/60">
-            <div className="w-8 h-8 rounded-lg bg-brand-gradient flex items-center justify-center shadow-sm">
-              <span className="text-xs font-bold text-white">
+        <div className="p-2 border-t border-surface-200 dark:border-dark-800 flex-shrink-0">
+          <div className="flex items-center gap-3 px-3 py-2.5 rounded bg-transparent">
+            <div className="w-8 h-8 rounded bg-surface-200 text-surface-700 dark:bg-dark-700 dark:text-dark-100 flex items-center justify-center">
+              <span className="text-xs font-semibold">
                 {user?.name?.charAt(0)?.toUpperCase()}
               </span>
             </div>

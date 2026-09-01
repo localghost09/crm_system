@@ -30,11 +30,11 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, State> {
 
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface-50 dark:bg-dark-950 p-6">
-        <div className="w-full max-w-md card p-8 text-center animate-scale-in">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-red-50 dark:bg-red-500/15 text-red-600 dark:text-red-400 flex items-center justify-center">
+        <div className="w-full max-w-md card p-6 text-center animate-scale-in">
+          <div className="w-14 h-14 mx-auto rounded bg-red-50 dark:bg-red-500/15 text-red-600 dark:text-red-400 flex items-center justify-center">
             <AlertTriangle className="w-7 h-7" />
           </div>
-          <h1 className="mt-4 font-display text-xl font-bold text-surface-900 dark:text-white">
+          <h1 className="mt-4 text-xl font-semibold text-surface-900 dark:text-white">
             Something went wrong
           </h1>
           <p className="mt-2 text-sm text-surface-500 dark:text-dark-400">

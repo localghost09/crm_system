@@ -15,17 +15,17 @@ import { normalizeMonthlySeries } from '../utils/chartData';
 
 const chartTooltipStyle = {
   contentStyle: {
-    background: 'rgba(255,255,255,0.95)',
-    border: '1px solid #e4e4e7',
-    borderRadius: '12px',
-    boxShadow: '0 10px 40px -10px rgba(0,0,0,0.12)',
+    background: '#ffffff',
+    border: '1px solid #d2d1cd',
+    borderRadius: '4px',
+    boxShadow: '0 4px 12px -4px rgba(20,19,18,0.2)',
     fontSize: '12px',
-    padding: '10px 14px',
+    padding: '6px 10px',
   },
 };
 
 const rankStyles = (i: number) => {
-  if (i === 0) return 'bg-gradient-to-b from-amber-400 to-amber-500 text-white shadow-sm shadow-amber-500/30';
+  if (i === 0) return 'bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800';
   if (i === 1) return 'bg-slate-200 text-slate-700 dark:bg-dark-600 dark:text-dark-200';
   if (i === 2) return 'bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400';
   return 'bg-surface-100 text-surface-500 dark:bg-dark-700 dark:text-dark-400';
@@ -38,8 +38,8 @@ const splineDot = (color: string, dataLength: number) => (props: any) => {
   const isLast = index === dataLength - 1;
   return (
     <g>
-      {isLast && <circle cx={cx} cy={cy} r={11} fill={color} fillOpacity={0.15} />}
-      <circle cx={cx} cy={cy} r={isLast ? 5 : 3} fill={color} stroke="#fff" strokeWidth={2} />
+      {isLast && <circle cx={cx} cy={cy} r={7} fill={color} fillOpacity={0.15} />}
+      <circle cx={cx} cy={cy} r={isLast ? 3.5 : 2} fill={color} stroke="#fff" strokeWidth={2} />
     </g>
   );
 };
@@ -175,47 +175,47 @@ const Reports: React.FC = () => {
 
       {/* KPI summary */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card p-5">
+        <div className="card p-4">
           <div className="flex items-center gap-3">
             <div className="icon-well bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400">
               <DollarSign className="w-5 h-5" />
             </div>
             <div>
               <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Total Revenue</p>
-              <p className="text-xl font-display font-bold text-surface-900 dark:text-white">{formatCurrency(totalRevenue)}</p>
+              <p className="text-xl font-semibold text-surface-900 dark:text-white">{formatCurrency(totalRevenue)}</p>
             </div>
           </div>
         </div>
-        <div className="card p-5">
+        <div className="card p-4">
           <div className="flex items-center gap-3">
             <div className="icon-well bg-sky-50 text-sky-600 dark:bg-sky-500/15 dark:text-sky-400">
               <Target className="w-5 h-5" />
             </div>
             <div>
               <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Deals Won</p>
-              <p className="text-xl font-display font-bold text-surface-900 dark:text-white">{totalWon}</p>
+              <p className="text-xl font-semibold text-surface-900 dark:text-white">{totalWon}</p>
             </div>
           </div>
         </div>
-        <div className="card p-5">
+        <div className="card p-4">
           <div className="flex items-center gap-3">
-            <div className="icon-well bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-400">
+            <div className="icon-well bg-primary-50 text-primary-600 dark:bg-primary-500/15 dark:text-primary-400">
               <TrendingUp className="w-5 h-5" />
             </div>
             <div>
               <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Avg Deal Value</p>
-              <p className="text-xl font-display font-bold text-surface-900 dark:text-white">{formatCurrency(avgDealValue)}</p>
+              <p className="text-xl font-semibold text-surface-900 dark:text-white">{formatCurrency(avgDealValue)}</p>
             </div>
           </div>
         </div>
-        <div className="card p-5">
+        <div className="card p-4">
           <div className="flex items-center gap-3">
             <div className="icon-well bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400">
               <Users className="w-5 h-5" />
             </div>
             <div>
               <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Active Reps</p>
-              <p className="text-xl font-display font-bold text-surface-900 dark:text-white">{performance.length}</p>
+              <p className="text-xl font-semibold text-surface-900 dark:text-white">{performance.length}</p>
             </div>
           </div>
         </div>
@@ -226,7 +226,7 @@ const Reports: React.FC = () => {
         <div className="card overflow-hidden">
           <div className="card-header">
             <div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">Revenue by Employee</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">Revenue by Employee</h3>
               <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">Winners are highlighted</p>
             </div>
           </div>
@@ -242,21 +242,21 @@ const Reports: React.FC = () => {
                   key={p._id || name}
                   className={`flex items-center gap-3 px-5 py-3.5 transition-colors ${
                     i === 0
-                      ? 'bg-gradient-to-r from-amber-50/80 to-transparent dark:from-amber-500/10 dark:to-transparent'
+                      ? 'bg-amber-50/60 dark:bg-amber-900/10'
                       : 'hover:bg-surface-50/60 dark:hover:bg-dark-800/30'
                   }`}
                 >
-                  <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${rankStyles(i)}`}>
+                  <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-semibold flex-shrink-0 ${rankStyles(i)}`}>
                     {i === 0 ? <Trophy className="w-3.5 h-3.5" /> : i + 1}
                   </span>
-                  <div className="w-9 h-9 rounded-xl bg-brand-gradient flex items-center justify-center shadow-sm shadow-primary-600/20 flex-shrink-0">
-                    <span className="text-xs font-bold text-white">{getInitials(name)}</span>
+                  <div className="w-9 h-9 rounded bg-surface-200 text-surface-700 dark:bg-dark-700 dark:text-dark-100 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs font-semibold">{getInitials(name)}</span>
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-semibold text-surface-900 dark:text-white truncate">{name}</p>
                       {i === 0 && (
-                        <span className="text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-400">
+                        <span className="text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-400">
                           Top
                         </span>
                       )}
@@ -266,7 +266,7 @@ const Reports: React.FC = () => {
                   <div className="hidden md:block w-28 lg:w-36 flex-shrink-0">
                     <div className="h-1.5 rounded-full bg-surface-100 dark:bg-dark-700 overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-500"
+                        className="h-full rounded-full bg-emerald-600 transition-all duration-500"
                         style={{ width: `${Math.round(((p.revenue || 0) / maxRevenue) * 100)}%` }}
                       />
                     </div>
@@ -275,7 +275,7 @@ const Reports: React.FC = () => {
                     </p>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <p className="text-sm font-bold font-display text-surface-900 dark:text-white tabular-nums">
+                    <p className="text-sm font-semibold text-surface-900 dark:text-white tabular-nums">
                       {formatCurrency(p.revenue || 0)}
                     </p>
                     <p className="text-[11px] text-surface-400 dark:text-dark-500 tabular-nums">
@@ -292,7 +292,7 @@ const Reports: React.FC = () => {
         <div className="card overflow-hidden">
           <div className="card-header">
             <div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">Monthly Revenue Trend</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">Monthly Revenue Trend</h3>
               <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">Won deal revenue over time</p>
             </div>
           </div>
@@ -301,23 +301,23 @@ const Reports: React.FC = () => {
               <AreaChart data={monthlyRevenue} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="reportRevenueGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#7c3aed" stopOpacity={0.35} />
-                    <stop offset="60%" stopColor="#7c3aed" stopOpacity={0.08} />
-                    <stop offset="100%" stopColor="#7c3aed" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#255288" stopOpacity={0.18} />
+                    <stop offset="60%" stopColor="#255288" stopOpacity={0.08} />
+                    <stop offset="100%" stopColor="#255288" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
-                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dy={6} />
-                <YAxis tickFormatter={(v) => `$${Number(v) / 1000}k`} stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} width={44} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e4e3e0" vertical={false} />
+                <XAxis dataKey="month" stroke="#7c7b76" fontSize={11} tickLine={false} axisLine={false} dy={6} />
+                <YAxis tickFormatter={(v) => `$${Number(v) / 1000}k`} stroke="#7c7b76" fontSize={11} tickLine={false} axisLine={false} width={44} />
                 <Tooltip formatter={(v) => formatCurrency(Number(v))} {...chartTooltipStyle} />
                 <Area
                   type="monotone"
                   dataKey="revenue"
-                  stroke="#7c3aed"
-                  strokeWidth={3}
+                  stroke="#255288"
+                  strokeWidth={1.75}
                   fill="url(#reportRevenueGrad)"
-                  dot={splineDot('#7c3aed', monthlyRevenue.length)}
-                  activeDot={{ r: 6, fill: '#7c3aed', stroke: '#fff', strokeWidth: 2 }}
+                  dot={splineDot('#255288', monthlyRevenue.length)}
+                  activeDot={{ r: 4, fill: '#255288', stroke: '#fff', strokeWidth: 2 }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -328,7 +328,7 @@ const Reports: React.FC = () => {
         <div className="card overflow-hidden">
           <div className="card-header">
             <div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">Leads by Source</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">Leads by Source</h3>
               <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">Where your leads come from</p>
             </div>
           </div>
@@ -341,7 +341,7 @@ const Reports: React.FC = () => {
         <div className="card overflow-hidden">
           <div className="card-header">
             <div>
-              <h3 className="font-display font-bold text-surface-900 dark:text-white">Customer Growth</h3>
+              <h3 className="font-semibold text-surface-900 dark:text-white">Customer Growth</h3>
               <p className="text-xs text-surface-400 dark:text-dark-500 mt-0.5">New customers per month</p>
             </div>
           </div>
@@ -350,23 +350,23 @@ const Reports: React.FC = () => {
               <AreaChart data={customerGrowthData} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="customerGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.35} />
-                    <stop offset="60%" stopColor="#06b6d4" stopOpacity={0.08} />
-                    <stop offset="100%" stopColor="#06b6d4" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#4f775b" stopOpacity={0.18} />
+                    <stop offset="60%" stopColor="#4f775b" stopOpacity={0.08} />
+                    <stop offset="100%" stopColor="#4f775b" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
-                <XAxis dataKey="month" stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} dy={6} />
-                <YAxis stroke="#a1a1aa" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} width={36} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e4e3e0" vertical={false} />
+                <XAxis dataKey="month" stroke="#7c7b76" fontSize={11} tickLine={false} axisLine={false} dy={6} />
+                <YAxis stroke="#7c7b76" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} width={36} />
                 <Tooltip {...chartTooltipStyle} />
                 <Area
                   type="monotone"
                   dataKey="customers"
-                  stroke="#06b6d4"
-                  strokeWidth={3}
+                  stroke="#4f775b"
+                  strokeWidth={1.75}
                   fill="url(#customerGrad)"
-                  dot={splineDot('#06b6d4', customerGrowthData.length)}
-                  activeDot={{ r: 6, fill: '#06b6d4', stroke: '#fff', strokeWidth: 2 }}
+                  dot={splineDot('#4f775b', customerGrowthData.length)}
+                  activeDot={{ r: 4, fill: '#4f775b', stroke: '#fff', strokeWidth: 2 }}
                 />
               </AreaChart>
             </ResponsiveContainer>

@@ -194,21 +194,21 @@ const FollowUps: React.FC = () => {
                             <>
                               <button
                                 onClick={() => updateMutation.mutate({ id: fu._id, data: { status: 'Completed' } })}
-                                className="p-1.5 rounded-xl text-surface-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
+                                className="p-1.5 rounded text-surface-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
                                 title="Mark completed"
                               >
                                 <CheckCircle2 className="w-4 h-4" />
                               </button>
                               <button
                                 onClick={() => updateMutation.mutate({ id: fu._id, data: { status: 'Cancelled' } })}
-                                className="p-1.5 rounded-xl text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                className="p-1.5 rounded text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                                 title="Cancel"
                               >
                                 <XCircle className="w-4 h-4" />
                               </button>
                             </>
                           )}
-                          <button onClick={() => openEdit(fu)} className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                          <button onClick={() => openEdit(fu)} className="p-1.5 rounded text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
                             <span className="text-xs font-medium">Edit</span>
                           </button>
                         </div>

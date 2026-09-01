@@ -213,10 +213,10 @@ const Tasks: React.FC = () => {
                       <td><Badge color={getStatusColor(task.status)}>{task.status}</Badge></td>
                       <td>
                         <div className="flex items-center justify-end gap-1">
-                          <button onClick={() => openEdit(task)} className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                          <button onClick={() => openEdit(task)} className="p-1.5 rounded text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
                             <Pencil className="w-4 h-4" />
                           </button>
-                          <button onClick={() => setDeleting(task)} className="p-1.5 rounded-xl text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                          <button onClick={() => setDeleting(task)} className="p-1.5 rounded text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
