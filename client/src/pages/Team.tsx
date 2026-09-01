@@ -167,14 +167,14 @@ const Team: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {users.map((user) => (
-          <div key={user._id} className="card p-5 hover:shadow-card-hover transition-all duration-300 group">
+          <div key={user._id} className="card p-4 hover:border-surface-300 dark:hover:border-dark-600 transition-colors group">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-brand-gradient rounded-2xl flex items-center justify-center shadow-sm shadow-primary-600/20">
-                  <span className="text-base font-bold text-white">{getInitials(user.name)}</span>
+                <div className="w-12 h-12 bg-surface-200 text-surface-700 dark:bg-dark-700 dark:text-dark-100 rounded flex items-center justify-center ">
+                  <span className="text-sm font-semibold">{getInitials(user.name)}</span>
                 </div>
                 <div className="min-w-0">
-                  <p className="font-display font-bold text-surface-900 dark:text-white truncate">{user.name}</p>
+                  <p className="font-semibold text-surface-900 dark:text-white truncate">{user.name}</p>
                   <p className="text-xs text-surface-500 dark:text-dark-400 truncate">{user.email}</p>
                 </div>
               </div>
@@ -205,10 +205,10 @@ const Team: React.FC = () => {
               </span>
               {isAdmin && (
                 <div className="flex gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => openEdit(user)} className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                  <button onClick={() => openEdit(user)} className="p-1.5 rounded text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
                     <Pencil className="w-4 h-4" />
                   </button>
-                  <button onClick={() => setDeleting(user)} className="p-1.5 rounded-xl text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                  <button onClick={() => setDeleting(user)} className="p-1.5 rounded text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>

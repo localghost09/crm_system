@@ -215,11 +215,11 @@ const DatePicker: React.FC<DatePickerProps> = ({
         className={`fixed z-[60] animate-scale-in ${pos.openUp ? 'origin-bottom' : 'origin-top'}`}
         style={{ left: pos.left, width: pos.width, ...(pos.top !== undefined ? { top: pos.top } : { bottom: pos.bottom }) }}
       >
-        <div className="bg-white/95 backdrop-blur-xl border border-surface-200 rounded-2xl shadow-elevated p-3.5
-          dark:bg-dark-800/95 dark:border-dark-600">
+        <div className="bg-white border border-surface-200 rounded shadow-elevated p-3.5
+          dark:bg-dark-800 dark:border-dark-600">
           {/* Month header */}
           <div className="flex items-center justify-between px-1 mb-3">
-            <p className="font-display font-bold text-surface-900 dark:text-white text-sm">
+            <p className="font-semibold text-surface-900 dark:text-white text-sm">
               {MONTHS[viewDate.getMonth()]} <span className="text-surface-400 dark:text-dark-500">{viewDate.getFullYear()}</span>
             </p>
             <div className="flex items-center gap-1">
@@ -263,11 +263,11 @@ const DatePicker: React.FC<DatePickerProps> = ({
                   onClick={() => selectDate(d)}
                   className={`h-9 rounded-lg text-sm transition-all duration-100 focus:outline-none
                     ${isSelected
-                      ? 'bg-gradient-to-b from-primary-500 to-primary-600 text-white font-semibold shadow-sm shadow-primary-600/30'
+                      ? 'bg-primary-600 text-white font-medium'
                       : inMonth
                         ? 'text-surface-700 dark:text-dark-200 hover:bg-surface-100 dark:hover:bg-dark-700'
                         : 'text-surface-300 dark:text-dark-600 hover:bg-surface-50 dark:hover:bg-dark-700/50'}
-                    ${!isSelected && isToday ? 'font-bold text-primary-600 dark:text-primary-400' : ''}
+                    ${!isSelected && isToday ? 'font-semibold text-primary-600 dark:text-primary-400' : ''}
                     ${!isSelected && isActive ? 'ring-2 ring-primary-400/70' : ''}`}
                 >
                   {d.getDate()}
@@ -277,7 +277,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between gap-2 mt-3 pt-3 border-t border-surface-100 dark:border-dark-700">
+          <div className="flex items-center justify-between gap-2 mt-3 pt-3 border-t border-surface-200 dark:border-dark-700">
             <div className="flex items-center gap-1.5">
               <button type="button" onClick={goToday} className="btn-ghost !px-2.5 !py-1.5 !text-xs">
                 Today

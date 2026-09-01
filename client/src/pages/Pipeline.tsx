@@ -18,8 +18,8 @@ const STAGES = ['New Lead', 'Contacted', 'Qualified', 'Proposal Sent', 'Negotiat
 const STAGE_STYLES: Record<string, { header: string; dot: string; badge: string }> = {
   'New Lead': { header: 'text-surface-700 dark:text-dark-200', dot: 'bg-surface-400', badge: 'gray' },
   'Contacted': { header: 'text-sky-700 dark:text-sky-300', dot: 'bg-sky-500', badge: 'info' },
-  'Qualified': { header: 'text-indigo-700 dark:text-indigo-300', dot: 'bg-indigo-500', badge: 'primary' },
-  'Proposal Sent': { header: 'text-violet-700 dark:text-violet-300', dot: 'bg-violet-500', badge: 'primary' },
+  'Qualified': { header: 'text-primary-700 dark:text-primary-300', dot: 'bg-primary-500', badge: 'primary' },
+  'Proposal Sent': { header: 'text-primary-700 dark:text-primary-300', dot: 'bg-primary-500', badge: 'primary' },
   'Negotiation': { header: 'text-amber-700 dark:text-amber-300', dot: 'bg-amber-500', badge: 'warning' },
   'Won': { header: 'text-emerald-700 dark:text-emerald-300', dot: 'bg-emerald-500', badge: 'success' },
   'Lost': { header: 'text-red-700 dark:text-red-300', dot: 'bg-red-500', badge: 'danger' },
@@ -195,23 +195,23 @@ const Pipeline: React.FC = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card p-4">
           <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Pipeline Value</p>
-          <p className="text-lg font-display font-bold text-surface-900 dark:text-white mt-1">
+          <p className="text-lg font-semibold text-surface-900 dark:text-white mt-1">
             {formatCurrency(Object.values(stageTotals).reduce((a, b) => a + b, 0))}
           </p>
         </div>
         <div className="card p-4">
           <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Open Deals</p>
-          <p className="text-lg font-display font-bold text-surface-900 dark:text-white mt-1">
+          <p className="text-lg font-semibold text-surface-900 dark:text-white mt-1">
             {opportunities.filter(o => o.stage !== 'Won' && o.stage !== 'Lost').length}
           </p>
         </div>
         <div className="card p-4">
           <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Won</p>
-          <p className="text-lg font-display font-bold text-emerald-600 dark:text-emerald-400 mt-1">{stageCounts['Won'] || 0}</p>
+          <p className="text-lg font-semibold text-emerald-600 dark:text-emerald-400 mt-1">{stageCounts['Won'] || 0}</p>
         </div>
         <div className="card p-4">
           <p className="text-xs font-medium text-surface-500 dark:text-dark-400">Lost</p>
-          <p className="text-lg font-display font-bold text-red-600 dark:text-red-400 mt-1">{stageCounts['Lost'] || 0}</p>
+          <p className="text-lg font-semibold text-red-600 dark:text-red-400 mt-1">{stageCounts['Lost'] || 0}</p>
         </div>
       </div>
 
@@ -223,9 +223,9 @@ const Pipeline: React.FC = () => {
           return (
             <div
               key={stage}
-              className={`flex-shrink-0 w-[280px] rounded-2xl transition-all duration-200 border ${
+              className={`flex-shrink-0 w-[280px] rounded transition-colors duration-100 border ${
                 dragOver === stage
-                  ? 'bg-primary-50/80 dark:bg-primary-900/20 border-primary-300 dark:border-primary-600 ring-2 ring-primary-400/40 shadow-glow'
+                  ? 'bg-primary-50/80 dark:bg-primary-900/20 border-primary-300 dark:border-primary-600 ring-1 ring-primary-400/40'
                   : 'bg-surface-100/60 dark:bg-dark-900/60 border-surface-200/60 dark:border-dark-800'
               }`}
               onDragOver={(e) => { e.preventDefault(); setDragOver(stage); }}
@@ -237,7 +237,7 @@ const Pipeline: React.FC = () => {
                   <span className={`w-2 h-2 rounded-full ${style.dot}`} />
                   <span className="text-sm font-semibold">{stage}</span>
                 </div>
-                <span className="text-[11px] font-bold bg-white dark:bg-dark-800 text-surface-600 dark:text-dark-300 px-2 py-0.5 rounded-lg shadow-soft">
+                <span className="text-[11px] font-semibold bg-white dark:bg-dark-800 text-surface-600 dark:text-dark-300 px-2 py-0.5 rounded-lg shadow-soft">
                   {stageOpps.length}
                 </span>
               </div>
@@ -249,7 +249,7 @@ const Pipeline: React.FC = () => {
                     onDragStart={() => setDragging(opp)}
                     onDragEnd={() => setDragging(null)}
                     onClick={() => setExpanded(expanded?._id === opp._id ? null : opp)}
-                    className="bg-white dark:bg-dark-800 rounded-xl shadow-soft border border-surface-200/80 dark:border-dark-700 p-3.5 cursor-grab active:cursor-grabbing hover:shadow-card-hover hover:border-surface-300 dark:hover:border-dark-600 transition-all duration-200"
+                    className="bg-white dark:bg-dark-800 rounded shadow-soft border border-surface-200 dark:border-dark-700 p-3.5 cursor-grab active:cursor-grabbing hover:border-surface-300 dark:hover:border-dark-600 transition-colors duration-100"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <p className="text-sm font-semibold text-surface-900 dark:text-white line-clamp-2 leading-snug">{opp.title}</p>
@@ -259,7 +259,7 @@ const Pipeline: React.FC = () => {
                       {opp.customer?.name || opp.lead?.name || 'No customer'}
                     </p>
                     <div className="flex items-center justify-between mt-3">
-                      <span className="text-sm font-bold font-display text-surface-900 dark:text-white">{formatCurrency(opp.expectedValue)}</span>
+                      <span className="text-sm font-semibold text-surface-900 dark:text-white">{formatCurrency(opp.expectedValue)}</span>
                       <span className="text-[11px] font-semibold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-500/10 px-1.5 py-0.5 rounded-md">{opp.probability}%</span>
                     </div>
                     <div className="flex items-center justify-between mt-2.5 text-[11px] text-surface-400 dark:text-dark-500">
@@ -272,7 +272,7 @@ const Pipeline: React.FC = () => {
                     </div>
 
                     {expanded?._id === opp._id && (
-                      <div className="mt-3 pt-3 border-t border-surface-100 dark:border-dark-700 space-y-2 animate-fade-in">
+                      <div className="mt-3 pt-3 border-t border-surface-200 dark:border-dark-700 space-y-2 animate-fade-in">
                         <div className="flex gap-2 items-center">
                           <Badge color={stage === 'Won' ? 'success' : stage === 'Lost' ? 'danger' : 'info'}>{opp.stage}</Badge>
                           <span className="text-[11px] text-surface-500 dark:text-dark-400">Created {formatDate(opp.createdAt)}</span>
@@ -291,7 +291,7 @@ const Pipeline: React.FC = () => {
                   </div>
                 ))}
                 {stageOpps.length === 0 && (
-                  <div className="border-2 border-dashed border-surface-200 dark:border-dark-700 rounded-xl py-8 text-center">
+                  <div className="border-2 border-dashed border-surface-200 dark:border-dark-700 rounded py-8 text-center">
                     <p className="text-xs text-surface-400 dark:text-dark-500">Drop deals here</p>
                   </div>
                 )}

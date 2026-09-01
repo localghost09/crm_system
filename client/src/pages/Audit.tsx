@@ -42,7 +42,7 @@ const Audit: React.FC = () => {
           <h1 className="page-title">Audit Logs</h1>
           <p className="page-subtitle">Track all important actions in the system</p>
         </div>
-        <div className="flex items-center gap-2 text-sm font-medium text-surface-600 dark:text-dark-300 bg-white dark:bg-dark-900 border border-surface-200 dark:border-dark-700 rounded-xl px-3.5 py-2 shadow-soft">
+        <div className="flex items-center gap-2 text-sm font-medium text-surface-600 dark:text-dark-300 bg-white dark:bg-dark-900 border border-surface-200 dark:border-dark-700 rounded px-3.5 py-2 shadow-soft">
           <Shield className="w-4 h-4 text-primary-500" />
           <span>{data?.pagination?.total || 0} events logged</span>
         </div>
@@ -91,8 +91,8 @@ const Audit: React.FC = () => {
                       <td className="text-xs">{formatDateTime(log.createdAt)}</td>
                       <td>
                         <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 bg-brand-gradient rounded-lg flex items-center justify-center">
-                            <span className="text-[10px] font-bold text-white">
+                          <div className="w-7 h-7 bg-surface-200 text-surface-700 dark:bg-dark-700 dark:text-dark-100 rounded-lg flex items-center justify-center">
+                            <span className="text-[10px] font-semibold">
                               {log.user?.name?.charAt(0)?.toUpperCase() || '?'}
                             </span>
                           </div>

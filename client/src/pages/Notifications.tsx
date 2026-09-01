@@ -16,8 +16,8 @@ const typeMeta: Record<string, { icon: any; color: string }> = {
   follow_up_reminder: { icon: CalendarClock, color: 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/40 dark:text-yellow-400' },
   task_overdue: { icon: AlertTriangle, color: 'bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400' },
   deal_status_change: { icon: TrendingUp, color: 'bg-green-100 text-green-600 dark:bg-green-900/40 dark:text-green-400' },
-  lead_conversion: { icon: RefreshCw, color: 'bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-400' },
-  customer_activity: { icon: Users, color: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400' },
+  lead_conversion: { icon: RefreshCw, color: 'bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-400' },
+  customer_activity: { icon: Users, color: 'bg-primary-100 text-primary-600 dark:bg-primary-900/40 dark:text-primary-400' },
   task_assigned: { icon: CheckCheck, color: 'bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-400' },
 };
 
@@ -74,11 +74,11 @@ const Notifications: React.FC = () => {
                 <button
                   key={n._id}
                   onClick={() => !n.isRead && markRead.mutate(n._id)}
-                  className={`w-full flex items-start gap-4 px-5 py-4 text-left transition-all duration-200 hover:bg-surface-50 dark:hover:bg-dark-800/50 ${
+                  className={`w-full flex items-start gap-4 px-5 py-4 text-left transition-colors duration-100 hover:bg-surface-50 dark:hover:bg-dark-800/50 ${
                     !n.isRead ? 'bg-primary-50/40 dark:bg-primary-500/5' : ''
                   }`}
                 >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${meta.color}`}>
+                  <div className={`w-10 h-10 rounded flex items-center justify-center flex-shrink-0 ${meta.color}`}>
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">

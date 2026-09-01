@@ -37,13 +37,13 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, title, children, size = 'm
       <div className="overlay" onClick={onClose} />
       <div className="relative flex min-h-full items-center justify-center p-4 sm:p-6">
         <div
-          className={`relative w-full ${sizeMap[size]} bg-white dark:bg-dark-900 rounded-3xl shadow-elevated border border-surface-200/80 dark:border-dark-700 animate-scale-in overflow-hidden`}
+          className={`relative w-full ${sizeMap[size]} bg-white dark:bg-dark-900 rounded shadow-elevated border border-surface-200 dark:border-dark-700 animate-scale-in overflow-hidden`}
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-title"
         >
           <div className="flex items-center justify-between px-6 py-4 border-b border-surface-100 dark:border-dark-800 bg-surface-50/50 dark:bg-dark-800/40">
-            <h2 id="modal-title" className="text-lg font-display font-bold text-surface-900 dark:text-white tracking-tight">
+            <h2 id="modal-title" className="text-lg font-semibold text-surface-900 dark:text-white tracking-tight">
               {title}
             </h2>
             <button

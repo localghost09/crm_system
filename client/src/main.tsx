@@ -30,20 +30,20 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               toastOptions={{
                 duration: 4000,
                 style: {
-                  borderRadius: '14px',
-                  background: '#18181b',
+                  borderRadius: '4px',
+                  background: '#1f1e1c',
                   color: '#fafafa',
                   fontSize: '13px',
-                  fontWeight: 500,
-                  padding: '12px 16px',
-                  boxShadow: '0 10px 40px -10px rgba(0,0,0,0.3)',
+                  fontWeight: 400,
+                  padding: '9px 12px',
+                  boxShadow: '0 6px 16px -6px rgba(20,19,18,0.35)',
                   border: '1px solid rgba(255,255,255,0.06)',
                 },
                 success: {
-                  iconTheme: { primary: '#10b981', secondary: '#fff' },
+                  iconTheme: { primary: '#4f775b', secondary: '#fff' },
                 },
                 error: {
-                  iconTheme: { primary: '#ef4444', secondary: '#fff' },
+                  iconTheme: { primary: '#a83c3c', secondary: '#fff' },
                 },
               }}
             />

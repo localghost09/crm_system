@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
-import { Mail, Lock, Loader2, Sparkles, Users, Target, TrendingUp, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Loader2, Users, Target, TrendingUp, ArrowRight } from 'lucide-react';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -36,75 +36,58 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-surface-50 dark:bg-dark-950">
+    <div className="min-h-screen flex bg-surface-100 dark:bg-dark-950">
       {/* Left panel - branding */}
-      <div className="hidden lg:flex lg:w-[48%] relative overflow-hidden text-white flex-col justify-between p-12">
-        <div className="absolute inset-0 bg-brand-gradient" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.15),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(6,182,212,0.25),transparent_50%)]" />
-        {/* Decorative orbs */}
-        <div className="absolute top-20 right-16 w-64 h-64 rounded-full bg-white/5 blur-3xl animate-float" />
-        <div className="absolute bottom-32 left-10 w-48 h-48 rounded-full bg-cyan-400/10 blur-2xl animate-float" style={{ animationDelay: '2s' }} />
+      <div className="hidden lg:flex lg:w-[42%] relative overflow-hidden text-white flex-col justify-between p-10">
+        <div className="absolute inset-0 bg-primary-900" />
 
         <div className="relative flex items-center gap-3">
-          <div className="w-11 h-11 bg-white/15 backdrop-blur-sm rounded-2xl flex items-center justify-center ring-1 ring-white/20">
-            <Sparkles className="w-5 h-5" />
+          <div className="w-7 h-7 rounded-sm bg-white/15 flex items-center justify-center">
+            <span className="text-xs font-semibold">C</span>
           </div>
-          <div>
-            <span className="text-xl font-display font-bold tracking-tight">CRM Pro</span>
-            <p className="text-[10px] font-medium text-white/60 uppercase tracking-widest -mt-0.5">Enterprise</p>
-          </div>
+          <span className="text-base font-semibold tracking-tight">CRM Pro</span>
         </div>
 
-        <div className="relative space-y-8">
+        <div className="relative space-y-6">
           <div>
-            <h1 className="font-display text-4xl xl:text-5xl font-bold leading-[1.15] tracking-tight">
-              Run your entire sales
-              <br />
-              <span className="text-white/90">operation from one place</span>
+            <h1 className="text-2xl font-semibold leading-snug max-w-sm">
+              One place for your leads, customers and deals.
             </h1>
-            <p className="mt-5 text-white/70 text-lg leading-relaxed max-w-md">
-              Manage leads, customers, deals, and your team — all in a beautiful, modern interface.
+            <p className="mt-3 text-white/70 text-sm leading-relaxed max-w-sm">
+              Used daily by sales, support and management teams to keep every account moving.
             </p>
           </div>
 
-          <div className="space-y-3 pt-2">
+          <div className="space-y-2.5 pt-1">
             {[
               { icon: Users, text: 'Track every lead and customer interaction' },
               { icon: Target, text: 'Visual sales pipeline with drag-and-drop' },
               { icon: TrendingUp, text: 'Real-time analytics and revenue insights' },
             ].map(({ icon: Icon, text }) => (
-              <div
-                key={text}
-                className="flex items-center gap-3.5 p-3 rounded-2xl bg-white/8 backdrop-blur-sm ring-1 ring-white/10"
-              >
-                <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-4 h-4" />
-                </div>
-                <span className="text-sm font-medium text-white/90">{text}</span>
+              <div key={text} className="flex items-center gap-3">
+                <Icon className="w-4 h-4 text-white/50 flex-shrink-0" strokeWidth={1.75} />
+                <span className="text-sm text-white/80">{text}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="relative text-white/40 text-sm">© 2026 CRM Pro. Enterprise-grade customer management.</p>
+        <p className="relative text-white/40 text-xs">© 2026 CRM Pro</p>
       </div>
 
       {/* Right panel - form */}
       <div className="flex-1 flex items-center justify-center p-6 sm:p-10 relative">
-        <div className="pointer-events-none absolute inset-0 bg-mesh dark:bg-mesh-dark opacity-60" aria-hidden />
-
         <div className="relative w-full max-w-[420px] animate-slide-up">
           <div className="mb-8 lg:hidden flex items-center gap-2.5 justify-center">
-            <div className="w-10 h-10 bg-brand-gradient rounded-2xl flex items-center justify-center shadow-glow">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="w-7 h-7 rounded-sm bg-primary-600 flex items-center justify-center">
+              <span className="text-xs font-semibold text-white">C</span>
             </div>
-            <span className="text-xl font-display font-bold text-surface-900 dark:text-white">CRM Pro</span>
+            <span className="text-base font-semibold text-surface-900 dark:text-white">CRM Pro</span>
           </div>
 
-          <div className="card p-8 sm:p-9 shadow-elevated">
+          <div className="card p-6 sm:p-7">
             <div className="mb-7">
-              <h2 className="font-display text-2xl font-bold text-surface-900 dark:text-white tracking-tight">
+              <h2 className="text-lg font-semibold text-surface-900 dark:text-white">
                 Welcome back
               </h2>
               <p className="mt-1.5 text-sm text-surface-500 dark:text-dark-400">
@@ -116,12 +99,12 @@ const Login: React.FC = () => {
               <div>
                 <label className="label-field">Email address</label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
+                  <Mail className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
                   <input
                     type="email"
                     {...register('email')}
                     placeholder="you@company.com"
-                    className="input-field pl-11"
+                    className="input-field pl-9"
                     autoComplete="email"
                   />
                 </div>
@@ -131,12 +114,12 @@ const Login: React.FC = () => {
               <div>
                 <label className="label-field">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
+                  <Lock className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
                   <input
                     type="password"
                     {...register('password')}
                     placeholder="Enter your password"
-                    className="input-field pl-11"
+                    className="input-field pl-9"
                     autoComplete="current-password"
                   />
                 </div>

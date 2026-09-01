@@ -328,19 +328,19 @@ const Leads: React.FC = () => {
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => setViewingLead(lead)}
-                            className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors dark:hover:bg-primary-900/20"
+                            className="p-1.5 rounded text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors dark:hover:bg-primary-900/20"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => openEditModal(lead)}
-                            className="p-1.5 rounded-xl text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors dark:hover:bg-primary-900/20"
+                            className="p-1.5 rounded text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors dark:hover:bg-primary-900/20"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => setDeleteLead(lead)}
-                            className="p-1.5 rounded-xl text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors dark:hover:bg-red-900/20"
+                            className="p-1.5 rounded text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors dark:hover:bg-red-900/20"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -455,7 +455,7 @@ const Leads: React.FC = () => {
           <div className="space-y-5">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-xl font-bold text-surface-900 dark:text-white">{viewingLead.name}</h3>
+                <h3 className="text-xl font-semibold text-surface-900 dark:text-white">{viewingLead.name}</h3>
                 <p className="text-sm text-surface-500 dark:text-dark-400">{viewingLead.company} • {viewingLead.industry}</p>
               </div>
               <div className="flex gap-2">

@@ -7,10 +7,7 @@ const AppLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-surface-50 dark:bg-dark-950 overflow-hidden">
-      {/* Ambient background mesh */}
-      <div className="pointer-events-none fixed inset-0 bg-mesh dark:bg-mesh-dark opacity-80" aria-hidden />
-
+    <div className="flex h-screen bg-surface-100 dark:bg-dark-950 overflow-hidden">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="relative flex-1 flex flex-col min-w-0">

@@ -183,9 +183,8 @@ const Select: React.FC<SelectProps> = ({
           <div
             ref={listRef}
             role="listbox"
-            className="max-h-64 overflow-y-auto p-1.5 bg-white/95 backdrop-blur-xl
-              border border-surface-200 rounded-2xl shadow-elevated
-              dark:bg-dark-800/95 dark:border-dark-600"
+            className="max-h-64 overflow-y-auto p-1.5 bg-white border border-surface-200 rounded shadow-elevated
+              dark:bg-dark-800 dark:border-dark-600"
           >
             {opts.length === 0 ? (
               <p className="px-3 py-2.5 text-sm text-surface-400 dark:text-dark-500">No options</p>
@@ -201,7 +200,7 @@ const Select: React.FC<SelectProps> = ({
                     aria-selected={isSelected}
                     onClick={() => selectOption(i)}
                     onMouseEnter={() => setActiveIndex(i)}
-                    className={`flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-sm cursor-pointer
+                    className={`flex items-center justify-between gap-3 px-3 py-2 rounded text-sm cursor-pointer
                       transition-colors duration-100
                       ${isActive ? 'bg-surface-100 dark:bg-dark-700' : ''}
                       ${

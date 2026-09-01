@@ -34,7 +34,7 @@ const Pagination: React.FC<PaginationProps> = ({ pagination, onPageChange }) => 
         <button
           onClick={() => hasPrevPage && onPageChange(page - 1)}
           disabled={!hasPrevPage}
-          className="p-2 rounded-xl text-surface-500 hover:bg-surface-100 disabled:opacity-40 dark:hover:bg-dark-800 dark:text-dark-400 transition-colors"
+          className="p-2 rounded text-surface-500 hover:bg-surface-100 disabled:opacity-40 dark:hover:bg-dark-800 dark:text-dark-400 transition-colors"
           aria-label="Previous page"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -43,7 +43,7 @@ const Pagination: React.FC<PaginationProps> = ({ pagination, onPageChange }) => 
           <button
             key={num}
             onClick={() => onPageChange(num)}
-            className={`min-w-[2rem] h-8 px-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+            className={`min-w-[2rem] h-8 px-2 rounded text-sm font-semibold transition-colors duration-100 ${
               num === page
                 ? 'bg-primary-600 text-white shadow-sm shadow-primary-600/30'
                 : 'text-surface-600 hover:bg-surface-100 dark:text-dark-300 dark:hover:bg-dark-800'
@@ -55,7 +55,7 @@ const Pagination: React.FC<PaginationProps> = ({ pagination, onPageChange }) => 
         <button
           onClick={() => hasNextPage && onPageChange(page + 1)}
           disabled={!hasNextPage}
-          className="p-2 rounded-xl text-surface-500 hover:bg-surface-100 disabled:opacity-40 dark:hover:bg-dark-800 dark:text-dark-400 transition-colors"
+          className="p-2 rounded text-surface-500 hover:bg-surface-100 disabled:opacity-40 dark:hover:bg-dark-800 dark:text-dark-400 transition-colors"
           aria-label="Next page"
         >
           <ChevronRight className="w-4 h-4" />

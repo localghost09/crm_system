@@ -230,8 +230,8 @@ const GlobalSearch: React.FC = () => {
         <div
           ref={listRef}
           className="absolute right-0 top-full mt-2 w-[min(24rem,calc(100vw-2rem))] max-h-[70vh] overflow-y-auto
-            bg-white/95 backdrop-blur-xl border border-surface-200 rounded-2xl shadow-elevated p-2
-            dark:bg-dark-800/95 dark:border-dark-600 animate-scale-in z-40"
+            bg-white border border-surface-200 rounded shadow-elevated p-2
+            dark:bg-dark-800 dark:border-dark-600 animate-scale-in z-40"
         >
           {anyPending && (
             <p className="flex items-center gap-2 px-3 py-2.5 text-sm text-surface-400 dark:text-dark-500">
@@ -268,7 +268,7 @@ const GlobalSearch: React.FC = () => {
 
           {renderedGroups.map(({ meta, items }) => (
             <div key={meta.label} className="mb-1 last:mb-0">
-              <p className="px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-widest text-surface-400 dark:text-dark-500">
+              <p className="px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-surface-400 dark:text-dark-500">
                 {meta.label}
               </p>
               {items.map(({ item, idx }) => {
@@ -281,7 +281,7 @@ const GlobalSearch: React.FC = () => {
                     data-idx={idx}
                     onClick={() => goTo(item)}
                     onMouseEnter={() => setActiveIndex(idx)}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors duration-100
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded text-left transition-colors duration-100
                       ${isActive ? 'bg-primary-50 dark:bg-primary-500/15' : 'hover:bg-surface-50 dark:hover:bg-dark-700/60'}`}
                   >
                     <span
@@ -316,7 +316,7 @@ const GlobalSearch: React.FC = () => {
           ))}
 
           {groups.length > 0 && (
-            <div className="flex items-center gap-3 mt-2 px-3 py-2 border-t border-surface-100 dark:border-dark-700">
+            <div className="flex items-center gap-3 mt-2 px-3 py-2 border-t border-surface-200 dark:border-dark-700">
               {[['↑↓', 'navigate'], ['↵', 'open'], ['esc', 'close']].map(([k, label]) => (
                 <span key={k} className="flex items-center gap-1 text-[11px] text-surface-400 dark:text-dark-500">
                   <kbd className="px-1 py-0.5 rounded bg-white dark:bg-dark-700 border border-surface-200 dark:border-dark-600 font-medium">
